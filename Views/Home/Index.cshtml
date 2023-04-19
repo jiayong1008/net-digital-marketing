@@ -1,0 +1,117 @@
+﻿@model string
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section Links {
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+}
+
+<section class="banner">
+    <div class="container">
+        <div class="col-md-10 col-lg-8 details">
+            <h1>BUILD YOUR ONLINE PRESENCE</h1>
+            <h3>Digital Marketing to Propel Your Buesiness to the Next Level.</h3>
+            <a class="button primary-btn" href="#sdc-details">Discover more</a>
+        </div>
+    </div>
+</section>
+
+<section id="home-top" class="intro py-5">
+    <div class="container">
+        <div class="row h-100">
+
+            <div class="intro-details d-flex flex-column col-lg-4 col-md-6 h-100 pt-lg-5">
+                <h3 class="pb-5"> Join APU's student developer club!</h3>
+                <h4 class=""> Up Your Skills</h4>
+                <p class="pb-3"> We are a club for students from all undergraduate or graduate programs with an interest in growing as a developer. By joining SDC, students grow their knowledge in a peer-to-peer learning environment and build solutions for local businesses and their community.</p>
+                <a href="./about.html">
+                    <img class="arrow-link" src="images/arrow.png" alt="">
+                </a>
+            </div>
+
+            <div class="intro-pic1 d-flex flex-column col-lg-4 col-md-6 h-100">
+                <div class="img-wrapper pb-3">
+                    <img src="images/students.jpg" alt="Collaboration">
+                </div>
+                <p class="">Learn with us.</p>
+            </div>
+
+            <div class="intro-pic2 d-flex flex-column col-lg-4 col-md-12 h-100">
+                <div class="spacer-50">
+                    <div class="blue-rectangle"></div>
+                </div>
+                <div class="img-wrapper pb-3">
+                    <img src="images/codes.jpg" alt="Codes">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="home-faq">
+    <div class="faq-title">
+        <h1 class="faq-title">Frequently Asked Questions</h1>
+        <p class="faq-title2">Got doubts? We're here to help!</p>
+    </div>
+
+    <!-- Accordion -->
+    <div class="faq-accordion">
+        <div class="faq-accordion-item">
+            <h2 class="faq-accordion-question">
+                How do I sign up?
+            </h2>
+
+            <p class="faq-accordion-answer">
+                Go to our Join Us page and register there! We're beyond delighted to have you on board!
+            </p>
+        </div>
+        <div class="faq-accordion-item">
+            <h2 class="faq-accordion-question">
+                Does the club offer certifications?
+            </h2>
+
+            <p class="faq-accordion-answer">
+                Yes! We have partnered with multiple developer clubs and organisations to offer you with certifications,
+                promotions for certification examinations, workshops and many more! To learn more, please head over to our About page.
+            </p>
+        </div>
+        <div class="faq-accordion-item">
+            <h2 class="faq-accordion-question">
+                What can members expect from joining this club?
+            </h2>
+
+            <p class="faq-accordion-answer">
+                We are dedicated to creating a community of aspiring developers to share ideas and work together on projects to learn new
+                skills as well as make connections to propel you into the developer industry.
+            </p>
+        </div>
+        <div class="faq-accordion-item">
+            <h2 class="faq-accordion-question">
+                Will the activites be held online or offline?
+            </h2>
+
+            <p class="faq-accordion-answer">
+                Our activities are designed to accomodate both online and offline members! Each activity held will have facilitators that
+                carries the activity online.
+            </p>
+        </div>
+        <div class="faq-accordion-item">
+            <h2 class="faq-accordion-question">
+                Does this club require fees?
+            </h2>
+
+            <p class="faq-accordion-answer">
+                All activities are funded by APU. So no need to worry!
+            </p>
+        </div>
+    </div>
+
+    <div class="question-not-found">
+        <p>
+            &ast; If you don't see your questions here, feel free to drop us a line at our <a class="contact-link" href="ContactUs.html">Contact</a> Page.
+        <p>
+    </div>
+</section>
+

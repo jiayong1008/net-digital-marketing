@@ -1,0 +1,43 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@model string
+
+
+@{
+    var linkType = Model + "-nav-link";
+}
+
+<li b-lr4enk8bru><a class="@linkType" asp-controller="Home" asp-action="Index">Home</a></li>
+<hr>
+<li b-lr4enk8bru><a class="@linkType" asp-controller="Modules" asp-action="Index">Modules</a></li>
+<hr>
+<li b-lr4enk8bru><a class="@linkType" asp-controller="About" asp-action="Index">About</a></li>
+<hr>
+<li b-lr4enk8bru><a class="@linkType" asp-controller="Resources" asp-action="Index">Resources</a></li>
+<hr />
+
+@if (SignInManager.IsSignedIn(User))
+{
+
+    if (this.User.IsInRole("Admin"))
+    {
+        <li b-lr4enk8bru><a class="@linkType" asp-controller="User" asp-action="Index">Users</a></li>
+        <hr>
+    }
+    else
+    {
+        <li><a class="burger-nav-link" asp-controller="Profile" asp-action="Index">Profile</a></li>
+        <hr>
+    }
+    <li b-lr4enk8bru><a class="@linkType" asp-controller="Account" asp-action="Logout">Logout</a></li>
+    <hr />
+}
+else
+{
+
+    <li b-lr4enk8bru><a class="@linkType" asp-controller="Account" asp-action="Register">Register</a></li>
+    <hr />
+    <li b-lr4enk8bru><a class="@linkType" asp-controller="Account" asp-action="Login">Login</a></li>
+    <hr />
+}

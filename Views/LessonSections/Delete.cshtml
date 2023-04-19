@@ -1,0 +1,71 @@
+﻿@model DigitalMarketing2.Models.LessonSectionFormModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>LessonSection</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LessonSectionId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LessonSectionId)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LessonSectionOrder)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LessonSectionOrder)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Text)
+        </dt>
+        @if (!String.IsNullOrEmpty(Model.Text))
+        {
+            
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Text)
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-10">N/A</dd>
+        }
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+        @if (Model.Image != null)
+        {
+            <div>
+                <img src="@Url.Action("GetImage", "LessonSections", new { id = Model.LessonSectionId })" style="max-width: 50vw; max-height: 50vh;" />
+            </div>
+        }
+        else
+        {
+            <dd class="col-sm-10">N/A</dd>
+        }
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LessonId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LessonId)
+        </dd>
+
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="LessonSectionId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

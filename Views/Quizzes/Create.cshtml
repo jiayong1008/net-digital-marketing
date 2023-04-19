@@ -1,0 +1,119 @@
+﻿@model DigitalMarketing2.Models.QuizFormModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>QuizQuestion</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="LessonId" class="control-label"></label>
+                <select asp-for="LessonId" class="form-control" asp-items="@(new SelectList(ViewBag.LessonSelectList,"LessonId","Name"))"></select>
+                <span asp-validation-for="LessonId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Question" class="control-label"></label>
+                <input asp-for="Question" class="form-control" />
+                <span asp-validation-for="Question" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QuizOrder" class="control-label"></label>
+                <input asp-for="QuizOrder" class="form-control" />
+                <span asp-validation-for="QuizOrder" class="text-danger"></span>
+            </div>
+            @*options and answer*@
+            <div id="question-options">
+                <div class="form-group">
+                    <label asp-for="QuestionOptions"></label>
+
+                    <div id="options-container">
+                        <div class="input-group">
+                            <input type="text" class="form-control option-input" name="QuestionOptions[0].Option" asp-for="QuestionOptions[0].Option" />
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-outline-secondary remove-option-button">Remove</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" class="form-control option-input" name="QuestionOptions[1].Option" asp-for="QuestionOptions[1].Option" />
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-outline-secondary remove-option-button">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="add-option-button" class="btn btn-outline-primary mt-2">Add Option</button>
+                    <span asp-validation-for="QuestionOptions" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="AnswerId"></label>
+                    <select class="form-control" asp-for="AnswerId" name="AnswerId" id="answer-dropdown">
+                        <option value="">-- Select Answer --</option>
+                    </select>
+                    <span asp-validation-for="AnswerId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        //document.onclick(click)
+        $(document).ready(function () {
+            // Add new option input field
+            $('#add-option-button').click(function () {
+                var optionCount = $('.option-input').length;
+                var newOption = '<div class="input-group">' +
+                    '<input type="text" class="form-control option-input" name="QuestionOptions[' + optionCount + '].Option" asp-for="QuestionOptions[' + optionCount + '].Option" />' +
+                    '<div class="input-group-append">' +
+                    '<button type="button" class="btn btn-outline-secondary remove-option-button">Remove</button>' +
+                    '</div>' +
+                    '</div>';
+                $('#options-container').append(newOption);
+            });
+
+            // Remove option input field
+            $(document).on('click', '.remove-option-button', function () {
+                var optionId = $(this).closest('.input-group').index();
+                $(this).closest('.input-group').remove();
+                $('#answer-dropdown').find('option[value="' + optionId + '"]').remove();
+            });
+
+            // Update answer dropdown list
+            $(document).on('change', '.option-input', function () {
+                var optionId = $(this).closest('.input-group').index();
+                var optionText = $(this).val();
+                var answerDropdown = $('#answer-dropdown');
+                var answerOption = '<option value="' + optionId + '">' + optionText + '</option>';
+
+                // Remove previous answer option, if any
+                answerDropdown.find('option[value="' + optionId + '"]').remove();
+
+                // Add new answer option
+                if (optionText) {
+                    answerDropdown.append(answerOption);
+                }
+            });
+        });
+    </script>
+}

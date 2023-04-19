@@ -1,0 +1,69 @@
+﻿@model DigitalMarketing2.Models.LessonSectionFormModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>LessonSection</h4>
+    <hr />
+    <dl class="row">
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LessonSectionId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LessonSectionId)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LessonSectionOrder)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LessonSectionOrder)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Text)
+        </dt>
+        @if (!String.IsNullOrEmpty(Model.Text))
+        {
+
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Text)
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-10">N/A</dd>
+        }
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+        @if (Model.Image != null)
+        {
+            <div>
+                <img src="@Url.Action("GetImage", "LessonSections", new { id = Model.LessonSectionId })" style="max-width: 50vw; max-height: 50vh;" />
+            </div>
+        }
+        else
+        {
+            <dd class="col-sm-10">N/A</dd>
+        }
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LessonId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LessonId)
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.LessonSectionId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

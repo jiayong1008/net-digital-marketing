@@ -1,0 +1,64 @@
+﻿@model RegisterUserModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<section class="vh-100 pt-5">
+    <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+
+        <div class="col-md-9 col-lg-6 col-xl-5">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                    class="img-fluid" alt="Sample image">
+        </div>
+
+        <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <form asp-action="Register" method="post">
+
+                <!-- Name input -->
+                <div class="form-outline mb-4">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control form-control-lg" />
+                </div>
+
+                <!-- Email input -->
+                <div class="form-outline mb-4">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control form-control-lg" />
+                </div>
+
+                <!-- Gender input -->
+                <div class="form-group mb-3">
+                    <label asp-for="Gender"></label>
+                    <select asp-for="Gender" class="form-control" asp-items="@new SelectList(Enum.GetNames(typeof(Gender)))">
+                        <option selected disabled value="Select">Select Gender</option>
+                    </select>
+                </div>
+
+                <!-- Password input -->
+                <div class="form-outline mb-3">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" class="form-control form-control-lg" />
+                </div>
+
+                <!-- Password Confirmation input -->
+                <div class="form-outline mb-3">
+                    <label asp-for="PasswordConfirmation" class="form-label"></label>
+                    <input asp-for="PasswordConfirmation" class="form-control form-control-lg" />
+                </div>
+
+                <div class="text-center text-lg-start mt-4 pt-2">
+                    <button type="submit" class="btn btn-primary btn-lg px-5">Login</button>
+                    <p class="small fw-bold mt-2 pt-1 mb-0">
+                        Already have an account?
+                        <a asp-controller="Account" asp-action="Login">Login</a>
+                    </p>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+    </div>
+</section>

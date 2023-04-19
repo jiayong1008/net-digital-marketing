@@ -1,0 +1,76 @@
+﻿@model DigitalMarketing2.Models.LessonSectionFormModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>LessonSection</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="LessonSectionId"/>
+            <div class="form-group">
+                <label asp-for="LessonId" class="control-label"></label>
+                <select asp-for="LessonId" class="form-control" asp-items="@(new SelectList(ViewBag.LessonSelectList,"LessonId","Name"))"></select>
+                <span asp-validation-for="LessonId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LessonSectionOrder"></label>
+                <input asp-for="LessonSectionOrder" class="form-control" />
+                <span asp-validation-for="LessonSectionOrder" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Text"></label>
+                <textarea asp-for="Text" class="form-control"></textarea>
+                <span asp-validation-for="Text" class="text-danger"></span>
+            </div>
+
+            @if (Model.Image != null)
+            {
+                <div class="form-group">
+                    <label>Uploaded Image:</label>
+                    <span>@Model.Image.FileName</span>
+                    <div>
+                        <img src="@Url.Action("GetImage", "LessonSections", new { id = Model.LessonSectionId })" style="max-width: 50vw; max-height: 50vh;" />
+                    </div>
+                    <input class="form-check-input" type="checkbox" asp-for="RemoveImage" />
+                    <label class="form-check-label" asp-for="RemoveImage">
+                        Remove existing image
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Image">Replace Image</label>
+                    <input asp-for="Image" type="file" accept="image/*" />
+                    <span asp-validation-for="Image" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label asp-for="Image"></label>
+                    <input asp-for="Image" type="file" accept="image/*" />
+                    <span asp-validation-for="Image" class="text-danger"></span>
+                </div>
+            }
+
+            <button type="submit" class="btn btn-primary">Edit</button>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

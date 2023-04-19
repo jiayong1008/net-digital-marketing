@@ -1,0 +1,59 @@
+﻿@model IEnumerable<DigitalMarketing2.Models.QuizQuestion>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Lesson.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Question)
+            </th>
+            <th>
+                Number of Options
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Answer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QuizOrder)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lesson.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Question)
+            </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.NumOptions)
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.Answer.Option)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuizOrder)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.QuizQuestionId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.QuizQuestionId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.QuizQuestionId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
