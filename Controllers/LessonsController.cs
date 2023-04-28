@@ -90,7 +90,7 @@ namespace DigitalMarketing2.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Lesson == null) { return NotFound(); }
-            var lesson = await _context.Lesson.FindAsync(id);
+            var lesson = await _context.Lesson.Include(lesson => lesson.Module).FirstOrDefaultAsync(lesson => lesson.LessonId == id);
             if (lesson == null) { return NotFound(); }
 
             var lessonForm = new LessonCreateFormModel
@@ -147,6 +147,7 @@ namespace DigitalMarketing2.Controllers
             if (id == null || _context.Lesson == null) return NotFound(); 
 
             var lesson = await _context.Lesson
+                .Include(lesson => lesson.Module)
                 .FirstOrDefaultAsync(m => m.LessonId == id);
             if (lesson == null) return NotFound();
 

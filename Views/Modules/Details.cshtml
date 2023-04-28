@@ -212,6 +212,7 @@
 
             @foreach (var lesson in Model.Lessons)
             {
+                <a asp-controller="Lessons" asp-action="Details" asp-route-id="@lesson.LessonId" class="w-100">
                 <div class="solution_card my-md-3 my-2 w-100 d-flex flex-md-row flex-column justify-content-around">
                     <div>
                         <div class="hover_color_bubble"></div>
@@ -280,6 +281,7 @@
                         <p class="mb-0">Lesson Level : @lesson.LessonOrder</p>
                     </div>
                 </div>
+                </a>
             }
 
             <div class="solution_card my-md-3 my-2 w-100 d-flex flex-md-row flex-column justify-content-around">

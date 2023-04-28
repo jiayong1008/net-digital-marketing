@@ -4,45 +4,51 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<section class="lesson-details-page min-vh-100 m-auto py-5 pt-10vh col-white w-80">
+  <div class="container pt-5">
 
-<div>
-    <h4>Lesson</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LessonId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LessonId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Duration)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Duration)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LessonOrder)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LessonOrder)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ModuleId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ModuleId)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.LessonId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <h1>Lesson Details</h1>
+
+    <div>
+        <h4>Lesson</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.LessonId)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.LessonId)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Duration)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Duration)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.LessonOrder)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.LessonOrder)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ModuleId)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ModuleId)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.LessonId">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+  </div>
+</section>
