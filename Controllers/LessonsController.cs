@@ -34,28 +34,35 @@ namespace DigitalMarketing2.Controllers
             if (id == null || _context.Lesson == null) { return NotFound(); }
 
             var lesson = await _context.Lesson
+                .Include(lesson => lesson.Module)
+                .Include(lesson => lesson.LessonSections)
                 .FirstOrDefaultAsync(m => m.LessonId == id);
             if (lesson == null) { return NotFound(); }
 
-            ViewBag.ModuleList = _context.Module.ToList();
-            var lessonForm = new LessonCreateFormModel
-            {
-                LessonId = lesson.LessonId,
-                Name = lesson.Name,
-                Duration = lesson.Duration,
-                LessonOrder = lesson.LessonOrder,
-                ModuleId = lesson.Module.ModuleId
-            };
+            //ViewBag.ModuleList = _context.Module.ToList();
+            //var lessonForm = new LessonCreateFormModel
+            //{
+            //    LessonId = lesson.LessonId,
+            //    Name = lesson.Name,
+            //    Duration = lesson.Duration,
+            //    LessonOrder = lesson.LessonOrder,
+            //    ModuleId = lesson.Module.ModuleId
+            //};
 
-            return View(lessonForm);
+            return View(lesson);
         }
 
         // GET: Lessons/Create
         [Authorize(Roles = "Admin")]
-        public IActionResult Create()
+        public IActionResult Create(int? ModuleId)
         {
-            ViewBag.ModuleList = _context.Module.ToList();
-            return View();
+            if (ModuleId == null) { return NotFound(); }
+
+            var lessonCreateFormModel = new LessonCreateFormModel
+            {
+                ModuleId = (int) ModuleId
+            };
+            return View(lessonCreateFormModel);
         }
 
         [HttpPost]
@@ -78,7 +85,7 @@ namespace DigitalMarketing2.Controllers
                 _context.Add(lesson);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), "Modules", new { id = module.ModuleId });
             }
 
             ViewBag.ModuleList = _context.Module.ToList();
@@ -133,7 +140,7 @@ namespace DigitalMarketing2.Controllers
                 _context.Update(lesson);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), "Modules", new { id = module.ModuleId });
             }
 
             ViewBag.ModuleList = _context.Module.ToList();

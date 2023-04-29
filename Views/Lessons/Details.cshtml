@@ -1,5 +1,4 @@
-﻿@model DigitalMarketing2.Models.LessonCreateFormModel
-
+﻿@model DigitalMarketing2.Models.Lesson
 @{
     ViewData["Title"] = "Details";
 }
@@ -38,16 +37,60 @@
                 @Html.DisplayFor(model => model.LessonOrder)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ModuleId)
+                @Html.DisplayNameFor(model => model.Module.ModuleId)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.ModuleId)
+                @Html.DisplayFor(model => model.Module.ModuleId)
             </dd>
         </dl>
     </div>
     <div>
-        <a asp-action="Edit" asp-route-id="@Model?.LessonId">Edit</a> |
-        <a asp-action="Index">Back to List</a>
+        @if (this.User.IsInRole("Admin"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model?.LessonId">Edit</a>
+            <span> | </span>
+        }
+        <a asp-controller="Modules" asp-action="Details" asp-route-id="@Model.Module.ModuleId">Back to List</a>
+    </div>
+
+    <div class="mt-5">
+        <div class="col-12 d-flex justify-content-between">
+            <h4>Lesson Sections</h4>
+            @if (this.User.IsInRole("Admin"))
+            {
+                <div class="mt-1">
+                    <a asp-controller="LessonSections" asp-action="Create" asp-route-LessonId="@Model.LessonId" class="secondary-btn px-4 py-2">Add Lesson Section</a>
+                </div>
+            }
+        </div>
+        
+        <dl class="row">
+        @foreach(var lessonSection in Model.LessonSections)
+        {
+            @if (lessonSection.IsText)
+            {
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(modelItem => lessonSection.Text)
+                </dd>
+            }
+            else if (lessonSection.IsImage)
+            {
+                <dd class="col-sm-10">
+                    <img src="data:image;base64,@Convert.ToBase64String(lessonSection.ImageData)" alt="Lesson Section Image" style="max-width: 200px; max-height: 200px;" />
+                </dd>
+            }
+
+            <dd>
+                @if (this.User.IsInRole("Admin"))
+                {
+                <a asp-controller="LessonSections" asp-action="Edit" asp-route-id="@lessonSection.LessonSectionId">Edit</a>
+                <span> | </span>
+                }
+                <a asp-controller="LessonSections" asp-action="Details" asp-route-id="@lessonSection.LessonSectionId">Details</a> |
+                <a asp-controller="LessonSections" asp-action="Delete" asp-route-id="@lessonSection.LessonSectionId">Delete</a>
+            </dd>
+        }
+        </dl>
     </div>
 
   </div>

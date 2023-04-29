@@ -75,10 +75,17 @@ namespace DigitalMarketing2.Controllers
 
         // GET: LessonSections/Create
         [Authorize(Roles = "Admin")]
-        public IActionResult Create() 
+        public IActionResult Create(int? LessonId) 
         {
-            ViewBag.LessonSelectList = _context.Lesson.ToList();
-            return View(); 
+            if (LessonId == null) return NotFound();
+
+            //ViewBag.LessonSelectList = _context.Lesson.ToList();
+
+            var lessonSectionForm = new LessonSectionFormModel
+            {
+                LessonId = (int) LessonId
+            };
+            return View(lessonSectionForm); 
         }
 
         // POST: LessonSections/Create
@@ -131,7 +138,7 @@ namespace DigitalMarketing2.Controllers
 
             _context.Add(lessonSection);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), "Lessons", new { id = lesson.LessonId });
         }
 
         // GET: LessonSections/Edit/5
@@ -243,7 +250,7 @@ namespace DigitalMarketing2.Controllers
                 else
                     throw;
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), "Lessons", new { Id = lesson.LessonId });
         }
 
         // GET: LessonSections/Delete/5

@@ -202,10 +202,16 @@
 <section class="module-lessons min-vh-100 m-auto pb-5 flex-center">
     <div class="container row d-flex flex-column gap-3">
 
-        <div class="col-12">
-            <h1 data-scroll-reveal="enter from the bottom after 0.2s" class="header-line pb-md-5 pb-sm-3" data-scroll-reveal-id="2" data-scroll-reveal-initialized="true" data-scroll-reveal-complete="true">
+        <div class="col-12 d-flex justify-content-between">
+            <h1 data-scroll-reveal="enter from the bottom after 0.2s" class="header-line mb-md-5 mb-sm-3" data-scroll-reveal-id="2" data-scroll-reveal-initialized="true" data-scroll-reveal-complete="true">
                 Lessons (@Model.Lessons.Count)
             </h1>
+            <div class="mt-1">
+            @if(this.User.IsInRole("Admin"))
+            {
+                <a asp-controller="Lessons" asp-action="Create" asp-route-ModuleId="@Model.ModuleId" class="secondary-btn px-4 py-3">Create Lesson</a>
+            }
+            </div>
         </div>
 
         <div class="col-12 solution_cards_box flex-center flex-column gy-3 module-detail-cards">

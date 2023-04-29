@@ -1,41 +1,49 @@
 ﻿@model DigitalMarketing2.Models.LessonSectionFormModel
 
-<h2>Create Lesson Section</h2>
 
-<form asp-action="Create" enctype="multipart/form-data">
+<section class="lessonsection-create-page min-vh-100 m-auto py-5 pt-10vh col-white w-80">
+    <div class="container pt-5">
+    <h2>Create Lesson Section</h2>
 
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="LessonId" class="control-label"></label>
-        <select asp-for="LessonId" class="form-control" asp-items="@(new SelectList(ViewBag.LessonSelectList,"LessonId","Name"))"></select>
-        <span asp-validation-for="LessonId" class="text-danger"></span>
+    <form asp-action="Create" enctype="multipart/form-data">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="LessonId"/>
+        @*<div class="form-group">
+            <label asp-for="LessonId" class="control-label"></label>
+            <select asp-for="LessonId" class="form-control" asp-items="@(new SelectList(ViewBag.LessonSelectList,"LessonId","Name"))"></select>
+            <span asp-validation-for="LessonId" class="text-danger"></span>
+        </div>*@
+
+        <div class="form-group">
+            <label asp-for="LessonSectionOrder"></label>
+            <input asp-for="LessonSectionOrder" class="form-control" />
+            <span asp-validation-for="LessonSectionOrder" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Text"></label>
+            <textarea asp-for="Text" class="form-control"></textarea>
+            <span asp-validation-for="Text" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Image"></label>
+            <input asp-for="Image" type="file" accept="image/*" />
+            <span asp-validation-for="Image" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create</button>
+
+    </form>
+
+    <div>
+        @*Should go back to its lesson page*@
+        <a asp-controller="Lessons" asp-action="Details" asp-route-id="@Model.LessonId">Back to List</a>
     </div>
-
-    <div class="form-group">
-        <label asp-for="LessonSectionOrder"></label>
-        <input asp-for="LessonSectionOrder" class="form-control" />
-        <span asp-validation-for="LessonSectionOrder" class="text-danger"></span>
     </div>
-
-    <div class="form-group">
-        <label asp-for="Text"></label>
-        <textarea asp-for="Text" class="form-control"></textarea>
-        <span asp-validation-for="Text" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Image"></label>
-        <input asp-for="Image" type="file" accept="image/*" />
-        <span asp-validation-for="Image" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Create</button>
-
-</form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+</section>
 
 @section Scripts {
     @{
