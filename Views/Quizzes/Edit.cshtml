@@ -60,7 +60,7 @@
                     {
                         var option = Model.QuestionOptions[i];
 
-                        @if (option.QuestionOptionId == Model.Answer.QuestionOptionId) {
+                            @if (Model.Answer != null && option.QuestionOptionId == Model.Answer.QuestionOptionId) {
                             <option value="@option.QuestionOptionId" selected>@option.Option</option>
                         } else
                         {

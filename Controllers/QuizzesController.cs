@@ -20,9 +20,12 @@ namespace DigitalMarketing2.Controllers
         }
 
         // GET: Quizzes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? LessonId)
         {
+            if (LessonId == null) return NotFound();
+
             var quizQuestions = await _context.QuizQuestion
+                .Where(q => q.Lesson.LessonId == LessonId)
                 .Include(q => q.Lesson)
                 //.Include(q => q.QuestionOptions)
                 .Include(q => q.Answer)
@@ -167,7 +170,8 @@ namespace DigitalMarketing2.Controllers
         {
             if (id != quizFormModel.QuizQuestionId) return NotFound();
 
-            var quizQuestion = await _context.QuizQuestion.FindAsync(id);
+            var quizQuestion = await _context.QuizQuestion.Include(ques => ques.Answer)
+                                .FirstOrDefaultAsync(ques => ques.QuizQuestionId == id);
             if (quizQuestion == null) return NotFound();
 
             ViewBag.LessonSelectList = _context.Lesson.ToList();
@@ -185,30 +189,48 @@ namespace DigitalMarketing2.Controllers
             quizQuestion.Question = quizFormModel.Question;
             quizQuestion.QuizOrder = quizFormModel.QuizOrder;
             quizQuestion.Lesson = lesson;
-            quizQuestion.QuestionOptions = new HashSet<QuestionOption>(); // Empty it first (will be updated below)
+            quizQuestion.AnswerId = null;
 
-            // Update Question Options
+            // Remove all question options and answer first
+            if (quizQuestion.Answer != null)
+            {
+                _context.QuestionOption.Remove(quizQuestion.Answer);
+                await _context.SaveChangesAsync();
+            }
+            var qOptions = _context.QuestionOption.Where(qo => qo.QuizQuestionId == id);
+            _context.QuestionOption.RemoveRange(qOptions);
+            await _context.SaveChangesAsync();
+            quizQuestion.QuestionOptions = new HashSet<QuestionOption>(); 
+
+            // Update New Question Options
             foreach (var option in quizFormModel.QuestionOptions)
             {
-                var qOption = _context.QuestionOption.Where(quesOption => quesOption.Option.Equals(option.Option)).First();
+                var qOption = _context.QuestionOption.Where(quesOption => quesOption.Option.Equals(option.Option));
+                QuestionOption quesOption = null;
 
-                // If updated question option does not exist yet
-                if (qOption == null)
+                // If updated question option already existed
+                if (qOption.Any())
+                {
+                    // Add the option to the list of question options
+                    quesOption = qOption.First();
+                    quizQuestion.QuestionOptions.Add(qOption.First());
+                }
+                else
                 {
                     // Create new question option
-                    qOption = new QuestionOption
+                    quesOption = new QuestionOption
                     {
                         Option = option.Option,
                         QuizQuestionId = quizFormModel.QuizQuestionId,
                     };
-                    _context.Add(qOption);
+                    _context.Add(quesOption);
                     await _context.SaveChangesAsync();
+                    quizQuestion.QuestionOptions.Add(quesOption);
                 }
-                
-                // Add the option to the list of question options and update answer
-                quizQuestion.QuestionOptions.Add(qOption);
-                if (quizFormModel.AnswerId == qOption.QuestionOptionId)
-                    quizQuestion.Answer = qOption;
+
+                // Update Answer
+                if (quizFormModel.AnswerId == quesOption.QuestionOptionId)
+                    quizQuestion.Answer = quesOption;
             }
 
             try
@@ -223,7 +245,7 @@ namespace DigitalMarketing2.Controllers
                 else
                     throw;
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { id = lesson.LessonId });
         }
 
         // GET: Quizzes/Delete/5
