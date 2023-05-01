@@ -5,17 +5,18 @@
     font-family: 'poppins', sans-serif;
 }
 
-.container {
+.resources-container {
     min-height: 60vh;
 }
 
-.container h1 {
-        margin-bottom: 60px;
+.resources-container h1 {
+        margin-bottom: 30px;
         font-weight: 600;
         position: relative;
 }
 
-.container h2{
+.resources-container h2{
+    margin-top: 30px;
     text-align: center;
     padding-top: 3%;
     margin-bottom: 60px;
@@ -23,7 +24,7 @@
     position: relative;
 }
 
-.container h2::after {
+.resources-container h2::after {
     content: '';
     background: #0094ff;
     width: 100px;
@@ -34,13 +35,13 @@
     transform: translateX(-50%);
 }
 
-.row{
+.resources-row{
     display:grid;
     grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 30px;
 }
 
-.service{
+.resources-service{
     text-align: center;
     padding: 25px 10px;
     border-radius: 5px;
@@ -51,7 +52,7 @@
 
 }
 
-.logo img{
+.resources-logo img{
     font-size: 40px;
     margin-bottom: 10px;
     height: 80px;
@@ -59,7 +60,7 @@
     text-align: center;
 }
 
-.logo1 img {
+.resources-logo1 img {
     font-size: 40px;
     margin-bottom: 10px;
     height: 80px;
@@ -69,13 +70,13 @@
 
 
 
-.service h3{
+.resources-service h3{
     font-weight: 600;
     margin-bottom: 8px;
     font-size: 20px;
 }
 
-.service:hover{
+.resources-service:hover{
     background: #ffffff;
     color: #0094ff;
     transform: scale(1.05);
