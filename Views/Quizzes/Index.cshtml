@@ -4,12 +4,16 @@
     ViewData["Title"] = "Index";
 }
 
+
+<section class="quiz-edit-page min-vh-100 m-auto py-5 pt-10vh col-white w-80">
+<div class="container pt-5">
+
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" asp-route-LessonId="@Model.First().Lesson.LessonId">Create New</a>
 </p>
-<table class="table">
+<table class="table col-white">
     <thead>
         <tr>
             <th>
@@ -57,3 +61,6 @@
 }
     </tbody>
 </table>
+
+</div>
+</section>

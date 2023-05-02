@@ -4,7 +4,10 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<section class="quiz-create-page min-vh-100 m-auto py-5 pt-10vh col-white w-80">
+<div class="container pt-5">
+
+<h1>Create Quiz</h1>
 
 <h4>QuizQuestion</h4>
 <hr />
@@ -12,11 +15,13 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+
+            <input type="hidden" asp-for="LessonId"/>
+            @*<div class="form-group">
                 <label asp-for="LessonId" class="control-label"></label>
                 <select asp-for="LessonId" class="form-control" asp-items="@(new SelectList(ViewBag.LessonSelectList,"LessonId","Name"))"></select>
                 <span asp-validation-for="LessonId" class="text-danger"></span>
-            </div>
+            </div>*@
 
             <div class="form-group">
                 <label asp-for="Question" class="control-label"></label>
@@ -69,51 +74,15 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" asp-route-LessonId="@Model.LessonId">Back to List</a>
 </div>
+
+</div>
+</section>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
-    <script>
-        //document.onclick(click)
-        $(document).ready(function () {
-            // Add new option input field
-            $('#add-option-button').click(function () {
-                var optionCount = $('.option-input').length;
-                var newOption = '<div class="input-group">' +
-                    '<input type="text" class="form-control option-input" name="QuestionOptions[' + optionCount + '].Option" asp-for="QuestionOptions[' + optionCount + '].Option" />' +
-                    '<div class="input-group-append">' +
-                    '<button type="button" class="btn btn-outline-secondary remove-option-button">Remove</button>' +
-                    '</div>' +
-                    '</div>';
-                $('#options-container').append(newOption);
-            });
-
-            // Remove option input field
-            $(document).on('click', '.remove-option-button', function () {
-                var optionId = $(this).closest('.input-group').index();
-                $(this).closest('.input-group').remove();
-                $('#answer-dropdown').find('option[value="' + optionId + '"]').remove();
-            });
-
-            // Update answer dropdown list
-            $(document).on('change', '.option-input', function () {
-                var optionId = $(this).closest('.input-group').index();
-                var optionText = $(this).val();
-                var answerDropdown = $('#answer-dropdown');
-                var answerOption = '<option value="' + optionId + '">' + optionText + '</option>';
-
-                // Remove previous answer option, if any
-                answerDropdown.find('option[value="' + optionId + '"]').remove();
-
-                // Add new answer option
-                if (optionText) {
-                    answerDropdown.append(answerOption);
-                }
-            });
-        });
-    </script>
+    <script src="~/js/quiz.js" asp-append-version="true"></script>
 }

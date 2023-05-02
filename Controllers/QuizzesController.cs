@@ -61,10 +61,16 @@ namespace DigitalMarketing2.Controllers
         }
 
         // GET: Quizzes/Create
-        public IActionResult Create()
+        public IActionResult Create(int? LessonId)
         {
-            ViewBag.LessonSelectList = _context.Lesson.ToList();
-            return View();
+            if (LessonId == null) return NotFound();
+
+            //ViewBag.LessonSelectList = _context.Lesson.ToList();
+            var quizFormModel = new QuizFormModel
+            {
+                LessonId = (int) LessonId
+            };
+            return View(quizFormModel);
         }
 
         // POST: Quizzes/Create
@@ -74,7 +80,12 @@ namespace DigitalMarketing2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("LessonId,Question,QuizOrder,QuestionOptions,AnswerId")] QuizFormModel quizFormModel)
         {
-            ViewBag.LessonSelectList = _context.Lesson.ToList();
+            // Display error if user removed all question options
+            if (quizFormModel.QuestionOptions == null)
+            {
+                ModelState.AddModelError(string.Empty, "Please enter at least two options and select one as the correct answer.");
+                return View(quizFormModel);
+            }
 
             // Temporarily remove QuestionOptions[{i}].QuizQuestion's validations (Will manually add later on)
             for (int i = 0; i < quizFormModel.QuestionOptions.Count; i++)
@@ -123,7 +134,7 @@ namespace DigitalMarketing2.Controllers
                 index++;
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { LessonId = lesson.LessonId });
         }
 
         private Task PopulateSelectListsAsync(QuizFormModel quizFormModel)
@@ -134,7 +145,7 @@ namespace DigitalMarketing2.Controllers
         // GET: Quizzes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            ViewBag.LessonSelectList = _context.Lesson.ToList();
+            //ViewBag.LessonSelectList = _context.Lesson.ToList();
 
             if (id == null || _context.QuizQuestion == null)
                 return NotFound();
@@ -174,13 +185,27 @@ namespace DigitalMarketing2.Controllers
                                 .FirstOrDefaultAsync(ques => ques.QuizQuestionId == id);
             if (quizQuestion == null) return NotFound();
 
-            ViewBag.LessonSelectList = _context.Lesson.ToList();
+            // Display error if user removed all question options
+            if (quizFormModel.QuestionOptions == null)
+            {
+                //quizFormModel.QuestionOptions = quizQuestion.QuestionOptions.ToList()
+                ModelState.AddModelError(string.Empty, "Please enter at least two options and select one as the correct answer.");
+                return View(quizFormModel);
+            }
 
             for (int i = 0; i < quizFormModel.QuestionOptions.Count; i++)
                 ModelState.Remove($"QuestionOptions[{i}].QuizQuestion");
-            
+
+            // Temporarily remove QuestionOptions[{i}].QuizQuestion's validations (Will manually add later on)
             if (!ModelState.IsValid)
                 return View(quizFormModel);
+
+            // Check if there are at least two question options
+            if (quizFormModel.QuestionOptions.Count < 2 || quizFormModel.AnswerId == null)
+            {
+                ModelState.AddModelError(string.Empty, "Please enter at least two options and select one as the correct answer.");
+                return View(quizFormModel);
+            }
 
             var lesson = await _context.Lesson.FindAsync(quizFormModel.LessonId);
             if (lesson == null) return NotFound();
@@ -200,37 +225,27 @@ namespace DigitalMarketing2.Controllers
             var qOptions = _context.QuestionOption.Where(qo => qo.QuizQuestionId == id);
             _context.QuestionOption.RemoveRange(qOptions);
             await _context.SaveChangesAsync();
-            quizQuestion.QuestionOptions = new HashSet<QuestionOption>(); 
+            quizQuestion.QuestionOptions = new HashSet<QuestionOption>();
 
             // Update New Question Options
+            // Create new quiz options and set answer for the question
+            var index = 0;
             foreach (var option in quizFormModel.QuestionOptions)
             {
-                var qOption = _context.QuestionOption.Where(quesOption => quesOption.Option.Equals(option.Option));
-                QuestionOption quesOption = null;
-
-                // If updated question option already existed
-                if (qOption.Any())
+                var quizOption = new QuestionOption
                 {
-                    // Add the option to the list of question options
-                    quesOption = qOption.First();
-                    quizQuestion.QuestionOptions.Add(qOption.First());
-                }
-                else
-                {
-                    // Create new question option
-                    quesOption = new QuestionOption
-                    {
-                        Option = option.Option,
-                        QuizQuestionId = quizFormModel.QuizQuestionId,
-                    };
-                    _context.Add(quesOption);
-                    await _context.SaveChangesAsync();
-                    quizQuestion.QuestionOptions.Add(quesOption);
-                }
+                    QuizQuestionId = quizQuestion.QuizQuestionId,
+                    Option = option.Option
+                };
 
-                // Update Answer
-                if (quizFormModel.AnswerId == quesOption.QuestionOptionId)
-                    quizQuestion.Answer = quesOption;
+                _context.Add(quizOption);
+                quizQuestion.QuestionOptions.Add(quizOption);
+
+                if (index == quizFormModel.AnswerId)
+                    quizQuestion.Answer = quizOption;
+
+                await _context.SaveChangesAsync();
+                index++;
             }
 
             try
@@ -245,7 +260,7 @@ namespace DigitalMarketing2.Controllers
                 else
                     throw;
             }
-            return RedirectToAction(nameof(Index), new { id = lesson.LessonId });
+            return RedirectToAction(nameof(Index), new { LessonId = lesson.LessonId });
         }
 
         // GET: Quizzes/Delete/5
