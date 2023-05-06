@@ -1,0 +1,46 @@
+﻿@model User
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<section class="user-update-page min-vh-100 m-auto py-5 pt-10vh col-white w-80">
+    <div class="container pt-5">
+
+<h1 class="text-white">User Profile</h1>
+<a asp-action="Index" class="btn btn-secondary">Back</a>
+
+        <div>
+            <h4>QuizQuestion</h4>
+            <hr />
+            <dl class="row">
+
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.UserName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.UserName)
+                </dd>
+
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Gender)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Gender)
+                </dd>
+            </dl>
+        </div>
+
+        <div>
+            <a asp-action="Update" asp-route-id="@Model.Id">Edit</a> |
+            <a asp-action="Index">Back</a>
+        </div>
+
+    </div>
+</section>

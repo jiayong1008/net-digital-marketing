@@ -12,17 +12,25 @@ namespace DigitalMarketing2.Models
 
         [Required]
         [DisplayName("Status")] // correct, incorrect
-        [StringLength(10, ErrorMessage = "Student's score status must be either 'correct' or 'incorrect'.")]
-        public string Status { get; set; }
+        public ScoreStatus Status { get; set; }
 
         // RELATIONSHIPS
         [Required]
-        public Enrollment Enrollment { get; set; }
+        public User User { get; set; }
+        //[Required]
+        //public Enrollment Enrollment { get; set; }
 
         [Required]
         [ForeignKey("QuizQuestion")]
         [DisplayName("Quiz Question")]
-        public int StudentQuizQuestionId { get; set; }
+        public int QuizQuestionId { get; set; }
         public QuizQuestion QuizQuestion { get; set; }
+
+        [DisplayName("Answer")]
+        [ForeignKey("Answer")]
+        public int AnswerId { get; set; }
+        public QuestionOption Answer { get; set; }
     }
+
+    public enum ScoreStatus { correct, incorrect }
 }

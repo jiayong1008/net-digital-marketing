@@ -1,0 +1,114 @@
+﻿@model IEnumerable<DigitalMarketing2.Models.QuizQuestion>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@section Links {
+    <link rel="stylesheet" href="~/css/quiz.css" asp-append-version="true" />
+}
+
+<section class="quiz-view-page min-vh-100 m-auto py-5 pt-10vh col-white w-80">
+<div class="container pt-5">
+
+<h1>Index</h1>
+
+<p class="mb-4">
+    <a asp-action="Create" asp-route-LessonId="@Model.First().Lesson.LessonId">Create New</a>
+</p>
+
+<form method="post" asp-action="SubmitQuiz">
+<div class="row solution_cards_box d-flex flex-wrap gy-4 justify-content-around">
+@foreach (var question in Model)
+{
+    <div class="solution_card mx-2 my-3 col-sm-12">
+        <div class="hover_color_bubble"></div>
+
+        <div class="d-flex justify-content-between">
+            <div class="solu_title">
+                <h3>@Html.DisplayFor(modelItem => question.Question)</h3>
+            </div>
+            <div class="flex-center">
+                @if (this.User.IsInRole("Admin"))
+                {
+                    <img src="~/css/icons/close-icon.svg" height="18" class="close-icon" />
+                }
+            </div>
+        </div>
+
+        <div class="solu_description d-flex flex-column py-2">
+            @foreach (var option in question.QuestionOptions)
+            {
+                <label class="pt-2 options">
+                    @*<input type="radio" name="@question.QuizQuestionId" value="@option.QuestionOptionId">*@
+                    <input type="radio" name="@question.QuizQuestionId" value="@option.QuestionOptionId">
+                    <span class="checkmark">@option.Option</span>
+                </label>
+            }
+            <div class="pt-4 d-flex justify-content-between">
+                <a asp-action="Edit" asp-route-id="@question.QuizQuestionId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@question.QuizQuestionId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@question.QuizQuestionId">Delete</a>
+            </div>
+        </div>
+    </div>
+}
+</div>
+</form>
+
+
+<table class="table col-white">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Lesson.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Question)
+            </th>
+            <th>
+                Number of Options
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Answer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QuizOrder)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lesson.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Question)
+            </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.NumOptions)
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.Answer.Option)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuizOrder)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.QuizQuestionId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.QuizQuestionId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.QuizQuestionId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+        <p>
+            <a asp-controller="Lessons" asp-action="Details" asp-route-id="@Model.First().Lesson.LessonId">Back To Lesson</a>
+        </p>
+
+</div>
+</section>

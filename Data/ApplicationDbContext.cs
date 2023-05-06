@@ -22,6 +22,7 @@ namespace DigitalMarketing2.Data
         public DbSet<DigitalMarketing2.Models.LessonSection> LessonSection { get; set; } = default!;
         public DbSet<DigitalMarketing2.Models.QuizQuestion> QuizQuestion { get; set; } = default!;
         public DbSet<DigitalMarketing2.Models.QuestionOption> QuestionOption { get; set; } = default!;
+        public DbSet<DigitalMarketing2.Models.StudentScore> StudentScore { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,7 +43,7 @@ namespace DigitalMarketing2.Data
             modelBuilder.Entity<StudentScore>()
                 .HasOne(score => score.QuizQuestion)
                 .WithMany()
-                .HasForeignKey(score => score.StudentQuizQuestionId)
+                .HasForeignKey(score => score.QuizQuestionId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

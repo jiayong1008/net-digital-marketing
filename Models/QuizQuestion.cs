@@ -67,4 +67,34 @@ namespace DigitalMarketing2.Models
         public QuestionOption? Answer { get; set; }
     }
 
+    public class QuizAttemptModel
+    {
+        [Key]
+        public int QuizQuestionId { get; set; }
+
+        [Required]
+        [DisplayName("Question")]
+        public string Question { get; set; }
+
+        // RELATIONSHIPS
+        [Required]
+        [DisplayName("Lesson Name")]
+        public Lesson Lesson { get; set; }
+
+        // Navigation property to the collection of associated QuestionOptions
+        [DisplayName("Answer Options")]
+        public virtual ICollection<QuestionOption> QuestionOptions { get; set; } = new HashSet<QuestionOption>();
+
+        [HiddenInput]
+        [Required]
+        [ForeignKey("Answer")]
+        public int? AnswerId { get; set; }
+        public QuestionOption? Answer { get; set; }
+
+        [Required]
+        [ForeignKey("Answer")]
+        public int? AttemptedAnswerId { get; set; }
+        public QuestionOption? AttemptedAnswer { get; set; }
+    }
+
 }

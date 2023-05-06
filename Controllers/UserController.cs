@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DigitalMarketing2.Controllers
 {
@@ -21,6 +22,24 @@ namespace DigitalMarketing2.Controllers
         public IActionResult Index()
         {
             return View(userManager.Users);
+        }
+
+        // GET: User/Details/5
+        public async Task<IActionResult> Details(string? id)
+        {
+            if (id == null) return NotFound();
+
+            //var @module = await _context.Module
+            //    .Include(mod => mod.Lessons)
+            //    .FirstOrDefaultAsync(mod => mod.ModuleId == id);
+
+            //if (@module == null) return NotFound();
+            //return View(@module);
+
+            User user = await userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            return View(user);
         }
 
         [Authorize(Roles = "Admin")]
