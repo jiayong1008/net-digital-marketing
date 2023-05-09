@@ -31,7 +31,9 @@
             <div class="flex-center">
                 @if (this.User.IsInRole("Admin"))
                 {
-                    <img src="~/css/icons/close-icon.svg" height="18" class="close-icon" />
+                    <a asp-action="Delete" asp-route-id="@question.QuizQuestionId">
+                        <img src="~/css/icons/close-icon.svg" height="18" class="close-icon" />
+                    </a>
                 }
             </div>
         </div>
@@ -40,9 +42,14 @@
             @foreach (var option in question.QuestionOptions)
             {
                 <label class="pt-2 options">
-                    @*<input type="radio" name="@question.QuizQuestionId" value="@option.QuestionOptionId">*@
-                    <input type="radio" name="@question.QuizQuestionId" value="@option.QuestionOptionId">
-                    <span class="checkmark">@option.Option</span>
+                    @if (option.QuestionOptionId == question.AnswerId)
+                    {
+                        <span class="checkmark text-success fw-bold">@option.Option</span>
+                    }
+                    else
+                    {
+                        <span class="checkmark">@option.Option</span>
+                    }
                 </label>
             }
             <div class="pt-4 d-flex justify-content-between">

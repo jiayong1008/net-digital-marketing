@@ -29,47 +29,6 @@ namespace DigitalMarketing2.Controllers
             _userManager = userMgr;
         }
 
-        [Authorize(Roles = "Admin,Registered")]
-        public async Task<IActionResult> Quiz()
-        {
-            // Retrieve a list of all quiz questions from the database
-            var quizQuestions = await _context.QuizQuestion
-                .Include(q => q.QuestionOptions).ToListAsync();
-
-            var quizQuestionViewModels = new List<QuizQuestionViewModel>();
-
-            foreach (var quizQuestion in quizQuestions)
-            {
-                var quizQuestionViewModel = new QuizQuestionViewModel
-                {
-                    QuizQuestionId = quizQuestion.QuizQuestionId,
-                    Question = quizQuestion.Question,
-                    Options = quizQuestion.QuestionOptions.Select(
-                        qo => new QuestionOptionViewModel
-                        {
-                            QuestionOptionId = qo.QuestionOptionId,
-                            Option = qo.Option
-                        }).ToList()
-                };
-
-                quizQuestionViewModels.Add(quizQuestionViewModel);
-            }
-
-            return View(quizQuestionViewModels);
-        }
-
-        [Authorize(Roles = "Registered")]
-        [HttpPost]
-        public IActionResult Quiz(List<QuizQuestionViewModel> quizQuestionViewModels)
-        {
-            foreach (var quizQuestionViewModel in quizQuestionViewModels)
-            {
-                //quizQuestionViewModel.AttemptedAnswerId = Request.Form[$"quizQuestionViewModels[{quizQuestionViewModel.QuizQuestionId}].AttemptedAnswerId"];
-            }
-
-            return View("QuizResults", quizQuestionViewModels);
-        }
-
         // GET: Quizzes
         [Authorize(Roles = "Admin,Registered")]
         public async Task<IActionResult> Index(int? LessonId, List<QuizQuestionViewModel>? quizQuestionViewModels)
@@ -77,20 +36,28 @@ namespace DigitalMarketing2.Controllers
             if (LessonId == null) return NotFound();
 
             var user = await _userManager.GetUserAsync(User);
-            var quizQuestions = await _context.QuizQuestion
-                .Where(q => q.Lesson.LessonId == LessonId)
-                //.Include(q => q.Lesson)
-                .Include(q => q.QuestionOptions)
-                //.Include(q => q.Answer)
-                .OrderBy(q => q.QuizOrder)
-                .ToListAsync();
-
+            List<QuizQuestion> quizQuestions = null;
+            
             if (await _userManager.IsInRoleAsync(user, "Admin"))
             {
+                quizQuestions = await _context.QuizQuestion
+                    .Where(q => q.Lesson.LessonId == LessonId)
+                    .Include(q => q.Lesson)
+                    .Include(q => q.QuestionOptions)
+                    .Include(q => q.Answer)
+                    .OrderBy(q => q.QuizOrder)
+                    .ToListAsync();
+
                 return View("ViewQuiz", quizQuestions);
             }
             else // Registered User
             {
+                quizQuestions = await _context.QuizQuestion
+                    .Where(q => q.Lesson.LessonId == LessonId)
+                    .Include(q => q.QuestionOptions)
+                    .OrderBy(q => q.QuizOrder)
+                    .ToListAsync();
+
                 if (quizQuestionViewModels.Count > 0)
                     return View("AttemptQuiz", quizQuestionViewModels);
 
@@ -371,14 +338,16 @@ namespace DigitalMarketing2.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.QuizQuestion'  is null.");
             }
-            var quizQuestion = await _context.QuizQuestion.FindAsync(id);
-            if (quizQuestion != null)
-            {
-                _context.QuizQuestion.Remove(quizQuestion);
-            }
+            var quizQuestion = await _context.QuizQuestion
+                .Include(q => q.Lesson)
+                .FirstOrDefaultAsync(q => q.QuizQuestionId == id);
+            if (quizQuestion == null) return NotFound();
+
+            var lessonId = quizQuestion.Lesson.LessonId;
+            _context.QuizQuestion.Remove(quizQuestion);
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { LessonId = lessonId });
         }
 
         // POST: Quizzes/SubmitQuiz
