@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NuGet.ContentModel;
 using System.Security.Claims;
 using System.Security.Policy;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace DigitalMarketing2.Controllers
 {
@@ -28,18 +29,59 @@ namespace DigitalMarketing2.Controllers
             _userManager = userMgr;
         }
 
+        [Authorize(Roles = "Admin,Registered")]
+        public async Task<IActionResult> Quiz()
+        {
+            // Retrieve a list of all quiz questions from the database
+            var quizQuestions = await _context.QuizQuestion
+                .Include(q => q.QuestionOptions).ToListAsync();
+
+            var quizQuestionViewModels = new List<QuizQuestionViewModel>();
+
+            foreach (var quizQuestion in quizQuestions)
+            {
+                var quizQuestionViewModel = new QuizQuestionViewModel
+                {
+                    QuizQuestionId = quizQuestion.QuizQuestionId,
+                    Question = quizQuestion.Question,
+                    Options = quizQuestion.QuestionOptions.Select(
+                        qo => new QuestionOptionViewModel
+                        {
+                            QuestionOptionId = qo.QuestionOptionId,
+                            Option = qo.Option
+                        }).ToList()
+                };
+
+                quizQuestionViewModels.Add(quizQuestionViewModel);
+            }
+
+            return View(quizQuestionViewModels);
+        }
+
+        [Authorize(Roles = "Registered")]
+        [HttpPost]
+        public IActionResult Quiz(List<QuizQuestionViewModel> quizQuestionViewModels)
+        {
+            foreach (var quizQuestionViewModel in quizQuestionViewModels)
+            {
+                //quizQuestionViewModel.AttemptedAnswerId = Request.Form[$"quizQuestionViewModels[{quizQuestionViewModel.QuizQuestionId}].AttemptedAnswerId"];
+            }
+
+            return View("QuizResults", quizQuestionViewModels);
+        }
+
         // GET: Quizzes
         [Authorize(Roles = "Admin,Registered")]
-        public async Task<IActionResult> Index(int? LessonId)
+        public async Task<IActionResult> Index(int? LessonId, List<QuizQuestionViewModel>? quizQuestionViewModels)
         {
             if (LessonId == null) return NotFound();
 
             var user = await _userManager.GetUserAsync(User);
             var quizQuestions = await _context.QuizQuestion
                 .Where(q => q.Lesson.LessonId == LessonId)
-                .Include(q => q.Lesson)
+                //.Include(q => q.Lesson)
                 .Include(q => q.QuestionOptions)
-                .Include(q => q.Answer)
+                //.Include(q => q.Answer)
                 .OrderBy(q => q.QuizOrder)
                 .ToListAsync();
 
@@ -49,21 +91,29 @@ namespace DigitalMarketing2.Controllers
             }
             else // Registered User
             {
-                var quizAttemptModels = new List<QuizAttemptModel>();
+                if (quizQuestionViewModels.Count > 0)
+                    return View("AttemptQuiz", quizQuestionViewModels);
+
+                quizQuestionViewModels = new List<QuizQuestionViewModel>();
 
                 foreach (QuizQuestion quizQuestion in quizQuestions)
                 {
-                    var quizAttemptModel = new QuizAttemptModel
+                    var quizQuestionViewModel = new QuizQuestionViewModel
                     {
                         QuizQuestionId = quizQuestion.QuizQuestionId,
                         Question = quizQuestion.Question,
-                        Lesson = quizQuestion.Lesson,
-                        QuestionOptions = quizQuestion.QuestionOptions,
-                        Answer = quizQuestion.Answer,
+                        LessonId = (int) LessonId,
+                        Options = quizQuestion.QuestionOptions.Select(
+                            qo => new QuestionOptionViewModel
+                            {
+                                QuestionOptionId = qo.QuestionOptionId,
+                                Option = qo.Option
+                            }).ToList(),
+                        AnswerId = (int) quizQuestion.AnswerId,
                     };
-                    quizAttemptModels.Add(quizAttemptModel);
+                    quizQuestionViewModels.Add(quizQuestionViewModel);
                 }
-                return View("AttemptQuiz", quizAttemptModels);
+                return View("AttemptQuiz", quizQuestionViewModels);
             }
         }
 
@@ -337,37 +387,67 @@ namespace DigitalMarketing2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Registered")]
-        public async Task<IActionResult> SubmitQuiz(int LessonId, IEnumerable<QuizQuestion> quizQuestions)
+        public async Task<IActionResult> SubmitQuiz(
+            [Bind("QuizQuestionId,Question,LessonId,AnswerId,AttemptedAnswerId")] 
+            IList<QuizQuestionViewModel> quizQuestionViewModels)
         {
+            //var lessonId = quizAttemptModels.First().LessonId;
+            var lessonId = 1;
+            var numQuesModels = quizQuestionViewModels.Count;
+
+            for (int i = 0; i < numQuesModels; i++)
+            {
+                ModelState.Remove($"[{i}].Options");
+            }
+
+            if (!ModelState.IsValid)
+                return RedirectToAction(nameof(Index), new { LessonId = lessonId, quizQuestionViewModels });
+
             // Retrieve the current user
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             User user = await _userManager.FindByIdAsync(userId);
 
             // Loop through each quiz question and create a student score instance for it
-            foreach (var question in quizQuestions)
+            foreach (var question in quizQuestionViewModels)
             {
                 // Retrieve the selected answer from the form
-                int selectedAnswerId = int.Parse(Request.Form[question.QuizQuestionId.ToString()]);
+                int attemptedAnswerId = question.AttemptedAnswerId;
 
                 // Determine if the selected answer is correct
-                bool isCorrect = (selectedAnswerId == question.AnswerId);
+                bool isCorrect = (attemptedAnswerId == question.AnswerId);
 
-                // Create a new student score instance
-                var studentScore = new StudentScore
+                // Attempt to find existing student score for current student and question
+                var studentScore = await _context.StudentScore
+                    .Where(score => score.User == user && score.QuizQuestionId == question.QuizQuestionId)
+                    .SingleOrDefaultAsync();
+
+                if (studentScore == null)
                 {
-                    User = user,
-                    QuizQuestion = question,
-                    Answer = await _context.QuestionOption.FindAsync(selectedAnswerId),
-                    Status = (isCorrect ? ScoreStatus.correct : ScoreStatus.incorrect)
-                };
+                    // Create a new student score instance
+                    studentScore = new StudentScore
+                    {
+                        User = user,
+                        QuizQuestion = await _context.QuizQuestion.FindAsync(question.QuizQuestionId),
+                        Answer = await _context.QuestionOption.FindAsync(attemptedAnswerId),
+                        Status = (isCorrect ? ScoreStatus.correct : ScoreStatus.incorrect)
+                    };
+                    _context.Add(studentScore);
+                }
+                else
+                {
+                    // Update the existing student score instance
+                    studentScore.Answer = await _context.QuestionOption.FindAsync(question.AttemptedAnswerId);
+                    studentScore.Status = (isCorrect ? ScoreStatus.correct : ScoreStatus.incorrect);
+                    _context.Update(studentScore);
+                }
 
-                // Save the student score to the database
-                _context.Add(studentScore);
+                // Save changes to the database
                 await _context.SaveChangesAsync();
             }
 
             // Redirect the user to the student score index page for this lesson
-            return RedirectToAction("Results", "StudentScore", new { user, LessonId });
+            //return RedirectToAction("Results", "StudentScore", new { user, LessonId });
+            return RedirectToAction(nameof(Index), new { LessonId = lessonId });
         }
         
     private bool QuizQuestionExists(int id)

@@ -1,0 +1,37 @@
+﻿@model List<QuizQuestionViewModel>
+
+<h2>Quiz</h2>
+
+@using (Html.BeginForm("Quiz", "Quizzes", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <table>
+        @foreach (var quizQuestion in Model)
+        {
+            <tr>
+                <td>
+                    @quizQuestion.Question
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @foreach (var option in quizQuestion.Options)
+                    {
+                        <label>
+                            @*@Html.RadioButtonFor(m => quizQuestion.AttemptedAnswerId, option.QuestionOptionId, new { Name = $"quizQuestion_{quizQuestion.QuizQuestionId}" })*@
+                            @Html.RadioButtonFor(m => m.First(q => q.QuizQuestionId == quizQuestion.QuizQuestionId).AttemptedAnswerId, option.QuestionOptionId, new { Name = $"quizQuestion_{quizQuestion.QuizQuestionId}" })
+
+                            @*@Html.RadioButtonFor(m => m.FirstOrDefault(q => q.QuizQuestionId == quizQuestion.QuizQuestionId).AttemptedAnswerId, option.QuestionOptionId, new { name = $"question_{quizQuestion.QuizQuestionId}" })*@
+                            @option.Option
+                        </label>
+                        <br />
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+
+    <br />
+    <button type="submit">Submit</button>
+}

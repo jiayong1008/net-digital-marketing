@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DigitalMarketing2.CustomValidations;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 
 namespace DigitalMarketing2.Models
 {
@@ -67,21 +70,40 @@ namespace DigitalMarketing2.Models
         public QuestionOption? Answer { get; set; }
     }
 
+    public class QuizQuestionViewModel
+    {
+        public int QuizQuestionId { get; set; }
+        public string Question { get; set; }
+        public int LessonId { get; set; }
+
+        [BindNever]
+        public List<QuestionOptionViewModel> Options { get; set; }
+        public int AnswerId { get; set; }
+        [Required]
+        [RequiredAnswer(ErrorMessage = "Please select an answer.")]
+        public int AttemptedAnswerId { get; set; }
+    }
+
+    public class QuizAttemptViewModel
+    {
+        public int QuizQuestionId { get; set; }
+        public int AttemptedAnswerId { get; set; }
+    }
+
     public class QuizAttemptModel
     {
-        [Key]
+        [HiddenInput]
         public int QuizQuestionId { get; set; }
 
         [Required]
         [DisplayName("Question")]
         public string Question { get; set; }
 
-        // RELATIONSHIPS
+        [HiddenInput]
         [Required]
-        [DisplayName("Lesson Name")]
-        public Lesson Lesson { get; set; }
+        [DisplayName("Lesson")]
+        public int LessonId { get; set; }
 
-        // Navigation property to the collection of associated QuestionOptions
         [DisplayName("Answer Options")]
         public virtual ICollection<QuestionOption> QuestionOptions { get; set; } = new HashSet<QuestionOption>();
 
@@ -92,7 +114,6 @@ namespace DigitalMarketing2.Models
         public QuestionOption? Answer { get; set; }
 
         [Required]
-        [ForeignKey("Answer")]
         public int? AttemptedAnswerId { get; set; }
         public QuestionOption? AttemptedAnswer { get; set; }
     }

@@ -22,4 +22,10 @@ namespace DigitalMarketing2.Models
         public int QuizQuestionId { get; set; }
         public QuizQuestion QuizQuestion { get; set; }
     }
+
+    public class QuestionOptionViewModel
+    {
+        public int QuestionOptionId { get; set; }
+        public string Option { get; set; }
+    }
 }
