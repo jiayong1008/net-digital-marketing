@@ -7,7 +7,6 @@
     <div class="container pt-5">
 
 <h1 class="text-white">User Profile</h1>
-<a asp-action="Index" class="btn btn-secondary">Back</a>
 
         <div>
             <h4>QuizQuestion</h4>
@@ -39,7 +38,15 @@
 
         <div>
             <a asp-action="Update" asp-route-id="@Model.Id">Edit</a> |
+            @if (User.IsInRole("Admin"))
+            {
             <a asp-action="Index">Back</a>
+            }
+            else
+            {
+            <a asp-controller="Home" asp-action="Index">Back</a>
+            }
+
         </div>
 
     </div>

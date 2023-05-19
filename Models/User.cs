@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Identity;
+using System.Runtime.InteropServices;
 
 namespace DigitalMarketing2.Models
 {
@@ -54,6 +55,32 @@ namespace DigitalMarketing2.Models
 
         [DisplayName("Remeber Me")]
         public bool Remember { get; set; }
+    }
+
+    public class UpdateUserModel
+    {
+        [Required]
+        [DisplayName("User ID")]
+        public string Id { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "E-mail is not valid")]
+        public string Email { get; set; }
+
+        [Required]
+        public Gender Gender { get; set; }
+
+        [DataType(DataType.Password)]
+        public string? Password { get; set; }
+
+        //[Required]
+        [DataType(DataType.Password)]
+        [DisplayName("Password Confirmation")]
+        [Compare("Password")]
+        public string? PasswordConfirmation { get; set; }
     }
 
     public class RoleEdit
