@@ -1,7 +1,9 @@
-﻿using DigitalMarketing2.Models;
+﻿using DigitalMarketing2.Data;
+using DigitalMarketing2.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 
 namespace DigitalMarketing2.Controllers
@@ -10,12 +12,13 @@ namespace DigitalMarketing2.Controllers
     {
         private UserManager<User> userManager;
         private IPasswordHasher<User> passwordHasher;
-
+        private readonly ApplicationDbContext _context;
         
-        public UserController(UserManager<User> usrMgr, IPasswordHasher<User> passwordHash)
+        public UserController(UserManager<User> usrMgr, IPasswordHasher<User> passwordHash, ApplicationDbContext context)
         {
             userManager = usrMgr;
             passwordHasher = passwordHash;
+            _context = context;
         }
 
         [Authorize(Roles = "Admin")]
@@ -29,7 +32,92 @@ namespace DigitalMarketing2.Controllers
         public async Task<IActionResult> Details(string? id)
         {
             if (id == null) return NotFound();
+            User user = await userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
 
+            // If user is not admin and the user is attempting to see other user's details
+            var currentUser = await userManager.GetUserAsync(User);
+            if ((!await userManager.IsInRoleAsync(currentUser, "Admin")) && (currentUser.Id != user.Id))
+                return NotFound();
+
+            // Main task - extract all user quiz score details and summarize by module
+            var studScores = await _context.StudentScore
+                .Include(s => s.User)
+                .Where(s => s.User.Id == id)
+                .Include(s => s.QuizQuestion)
+                    .ThenInclude(q => q.Lesson)
+                        .ThenInclude(l => l.Module)
+                .ToListAsync();
+
+            // TODO - make sure only 1 unique lessonId instance for each user
+            // Create few quiz instance too before proceeding here
+
+            var profileModuleSummaries = new List<ProfileModuleSummary>();
+            var profileQuizScores = new List<ProfileQuizScore>();
+
+            foreach (var studScore in studScores)
+            {
+                var lessonId = studScore.QuizQuestion.Lesson.LessonId;
+
+                // Check if quizQuestionId exists in profileQuizScores
+                var profileQuizScore = profileQuizScores.FirstOrDefault(p => p.LessonId == lessonId);
+
+                if (profileQuizScore != null)
+                {
+                    // Update profileQuizScore
+                    profileQuizScore.TotalQuestions += 1;
+
+                    if (studScore.Status == ScoreStatus.correct)
+                        profileQuizScore.CorrectQuestions += 1;
+
+                    profileQuizScore.QuizScore = (((double)profileQuizScore.CorrectQuestions / profileQuizScore.TotalQuestions) * 100);
+                    //profileQuizScore.TotalQuestions = profileQuizScore.TotalQuestions;
+                }
+                else
+                {
+                    // Create new profileQuizScore
+                    profileQuizScore = new ProfileQuizScore
+                    {
+                        LessonId = studScore.QuizQuestion.Lesson.LessonId,
+                        LessonName = studScore.QuizQuestion.Lesson.Name,
+                        //QuizQuestionId = quizQuestionId,
+                        CorrectQuestions = (studScore.Status == ScoreStatus.correct) ? 1 : 0,
+                        TotalQuestions = 1,
+                        QuizScore = (studScore.Status == ScoreStatus.correct) ? 100.00 : 0.00, // In percentage
+                    };
+                    profileQuizScores.Add(profileQuizScore);
+                }
+
+                // Module Summary
+                var module = studScore.QuizQuestion.Lesson.Module;
+                var moduleSummary = profileModuleSummaries.FirstOrDefault(mod => mod.ModuleId == module.ModuleId);
+
+                if (moduleSummary != null)
+                {
+                    // Update module summary
+                    moduleSummary.ProfileQuizScores = profileQuizScores;
+                }
+                else
+                {
+                    // Create new module summary
+                    var profileModuleSummary = new ProfileModuleSummary
+                    {
+                        ModuleId = module.ModuleId,
+                        ModuleName = module.Name,
+                        ProfileQuizScores = profileQuizScores,
+                    };
+                    profileModuleSummaries.Add(profileModuleSummary);
+                }
+            }
+
+            var profileUserModel = new ProfileUserModel
+            {
+                Id = currentUser.Id,
+                Name = currentUser.UserName,
+                Email = currentUser.Email,
+                Gender = currentUser.Gender,
+                profileModuleSummaries = profileModuleSummaries,
+            };
             //var @module = await _context.Module
             //    .Include(mod => mod.Lessons)
             //    .FirstOrDefaultAsync(mod => mod.ModuleId == id);
@@ -37,16 +125,7 @@ namespace DigitalMarketing2.Controllers
             //if (@module == null) return NotFound();
             //return View(@module);
 
-            // Current logged in user
-            var currentUser = await userManager.GetUserAsync(User);
-            User user = await userManager.FindByIdAsync(id);
-            if (user == null) return NotFound();
-
-            // If user is not admin and the user is attempting to see other user's details
-            if ((!await userManager.IsInRoleAsync(currentUser, "Admin")) && (currentUser.Id != user.Id))
-                return NotFound();
-
-            return View(user);
+            return View(profileUserModel);
         }
 
         [Authorize(Roles = "Admin")]

@@ -101,4 +101,21 @@ namespace DigitalMarketing2.Models
 
         public string[]? DeleteIds { get; set; }
     }
+
+    public class ProfileUserModel
+    {
+        [DisplayName("User ID")]
+        public string Id { get; set; }
+
+        [DisplayName("Name")]
+        public string Name { get; set; }
+
+        [DisplayName("Email")]
+        public string Email { get; set; }
+
+        [DisplayName("Gender")]
+        public Gender Gender { get; set; }
+
+        public List<ProfileModuleSummary> profileModuleSummaries { get; set; }
+    }
 }

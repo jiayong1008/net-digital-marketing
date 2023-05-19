@@ -26,4 +26,14 @@ namespace DigitalMarketing2.Models
         public List<Enrollment>? Enrollments { get; set;}
 
     }
+
+    public class ProfileModuleSummary
+    {
+        public int ModuleId { get; set; }
+
+        [DisplayName("Module Name")]
+        public string ModuleName { get; set; }
+
+        public List<ProfileQuizScore>? ProfileQuizScores { get; set; }
+    }
 }

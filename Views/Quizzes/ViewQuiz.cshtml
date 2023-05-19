@@ -1,4 +1,5 @@
-﻿@model IEnumerable<DigitalMarketing2.Models.QuizQuestion>
+﻿@model ViewQuizIndexModel
+@*@model IEnumerable<DigitalMarketing2.Models.QuizQuestion>*@
 
 @{
     ViewData["Title"] = "Index";
@@ -14,12 +15,12 @@
 <h1>Index</h1>
 
 <p class="mb-4">
-    <a asp-action="Create" asp-route-LessonId="@Model.First().Lesson.LessonId">Create New</a>
+    <a asp-action="Create" asp-route-LessonId="@Model.LessonId">Create New</a>
 </p>
 
 <form method="post" asp-action="SubmitQuiz">
 <div class="row solution_cards_box d-flex flex-wrap gy-4 justify-content-around">
-@foreach (var question in Model)
+@foreach (var question in Model.QuizQuestions)
 {
     <div class="solution_card mx-2 my-3 col-sm-12">
         <div class="hover_color_bubble"></div>
@@ -68,25 +69,25 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Lesson.Name)
+                Lesson Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Question)
+                Qustion
             </th>
             <th>
                 Number of Options
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Answer)
+                Answer
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.QuizOrder)
+                Quiz Order
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.QuizQuestions) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Lesson.Name)
@@ -114,7 +115,7 @@
 </table>
 
         <p>
-            <a asp-controller="Lessons" asp-action="Details" asp-route-id="@Model.First().Lesson.LessonId">Back To Lesson</a>
+            <a asp-controller="Lessons" asp-action="Details" asp-route-id="@Model.LessonId">Back To Lesson</a>
         </p>
 
 </div>

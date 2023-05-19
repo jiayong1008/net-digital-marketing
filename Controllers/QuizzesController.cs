@@ -48,7 +48,13 @@ namespace DigitalMarketing2.Controllers
                     .OrderBy(q => q.QuizOrder)
                     .ToListAsync();
 
-                return View("ViewQuiz", quizQuestions);
+                var viewQuizIndexModel = new ViewQuizIndexModel
+                {
+                    LessonId = (int)LessonId,
+                    QuizQuestions = quizQuestions,
+                };
+
+                return View("ViewQuiz", viewQuizIndexModel);
             }
             else // Registered User
             {
@@ -416,7 +422,7 @@ namespace DigitalMarketing2.Controllers
 
             // Redirect the user to the student score index page for this lesson
             //return RedirectToAction("Results", "StudentScore", new { user, LessonId });
-            return RedirectToAction(nameof(Index), new { LessonId = lessonId });
+            return RedirectToAction("Details", "Lessons", new { id = lessonId });
         }
         
     private bool QuizQuestionExists(int id)

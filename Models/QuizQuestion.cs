@@ -42,6 +42,12 @@ namespace DigitalMarketing2.Models
         public int NumOptions => QuestionOptions.Count;
     }
 
+    public class ViewQuizIndexModel
+    {
+        public int LessonId { get; set; }
+        public List<QuizQuestion> QuizQuestions { get; set; }
+    }
+
     public class QuizFormModel
     {
         [HiddenInput]
@@ -116,6 +122,25 @@ namespace DigitalMarketing2.Models
         [Required]
         public int? AttemptedAnswerId { get; set; }
         public QuestionOption? AttemptedAnswer { get; set; }
+    }
+
+    public class ProfileQuizScore
+    {
+        public int LessonId { get; set; }
+
+        [DisplayName("Lesson Name")]
+        public string LessonName { get; set; }
+
+        //public int QuizQuestionId { get; set; }
+
+        [DisplayName("Correct Questions")]
+        public int CorrectQuestions { get; set; }
+
+        [DisplayName("Total Questions")]
+        public int TotalQuestions { get; set; }
+
+        [DisplayName("Quiz Score")]
+        public double QuizScore { get; set; }
     }
 
 }
