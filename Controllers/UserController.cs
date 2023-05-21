@@ -49,9 +49,6 @@ namespace DigitalMarketing2.Controllers
                         .ThenInclude(l => l.Module)
                 .ToListAsync();
 
-            // TODO - make sure only 1 unique lessonId instance for each user
-            // Create few quiz instance too before proceeding here
-
             var profileModuleSummaries = new List<ProfileModuleSummary>();
             var profileQuizScores = new List<ProfileQuizScore>();
 

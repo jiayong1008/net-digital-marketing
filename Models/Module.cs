@@ -22,7 +22,8 @@ namespace DigitalMarketing2.Models
         public int ModuleOrder { get; set; }
 
         // RELATIONSHIPS
-        public List<Lesson>? Lessons { get; set;}        
+        public List<Lesson>? Lessons { get; set;}
+        public List<Discussion>? Discussions { get; set; }
         public List<Enrollment>? Enrollments { get; set;}
 
     }
@@ -35,5 +36,11 @@ namespace DigitalMarketing2.Models
         public string ModuleName { get; set; }
 
         public List<ProfileQuizScore>? ProfileQuizScores { get; set; }
+    }
+
+    public class ModuleDetailModel
+    {
+        public Module Module { get; set; }
+        public DiscussionFormModel DiscussionForm { get; set; }
     }
 }

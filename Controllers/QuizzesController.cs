@@ -64,7 +64,10 @@ namespace DigitalMarketing2.Controllers
                     .OrderBy(q => q.QuizOrder)
                     .ToListAsync();
 
-                if (quizQuestionViewModels.Count > 0)
+                if (quizQuestions.Count == 0) 
+                    return RedirectToAction("Details", "Lessons", new { id = LessonId });
+
+                else if (quizQuestionViewModels.Count > 0)
                     return View("AttemptQuiz", quizQuestionViewModels);
 
                 quizQuestionViewModels = new List<QuizQuestionViewModel>();

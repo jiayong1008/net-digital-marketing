@@ -23,6 +23,7 @@ namespace DigitalMarketing2.Data
         public DbSet<DigitalMarketing2.Models.QuizQuestion> QuizQuestion { get; set; } = default!;
         public DbSet<DigitalMarketing2.Models.QuestionOption> QuestionOption { get; set; } = default!;
         public DbSet<DigitalMarketing2.Models.StudentScore> StudentScore { get; set; } = default!;
+        public DbSet<DigitalMarketing2.Models.Discussion> Discussion { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

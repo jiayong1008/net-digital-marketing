@@ -1,6 +1,7 @@
 ﻿
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DigitalMarketing2.Models
 {
@@ -19,9 +20,21 @@ namespace DigitalMarketing2.Models
 
         // RELATIONSHIPS
         [Required]
+        public string UserId { get; set;}
         public User User { get; set; }
 
         [Required]
-        public Lesson Lesson { get; set; }
+        [ForeignKey("Module")]
+        public int ModuleId { get; set; }
+        public Module Module { get; set; }
+    }
+
+    public class DiscussionFormModel
+    {
+        [Required]
+        public string UserId { get; set; }
+
+        [Required]
+        public string Comment { get; set; }
     }
 }
