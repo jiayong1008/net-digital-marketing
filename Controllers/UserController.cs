@@ -115,12 +115,6 @@ namespace DigitalMarketing2.Controllers
                 Gender = currentUser.Gender,
                 profileModuleSummaries = profileModuleSummaries,
             };
-            //var @module = await _context.Module
-            //    .Include(mod => mod.Lessons)
-            //    .FirstOrDefaultAsync(mod => mod.ModuleId == id);
-
-            //if (@module == null) return NotFound();
-            //return View(@module);
 
             return View(profileUserModel);
         }

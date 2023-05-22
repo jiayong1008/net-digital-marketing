@@ -1,4 +1,5 @@
 ﻿@model DigitalMarketing2.Models.ModuleDetailModel
+@inject Microsoft.AspNetCore.Identity.UserManager<User> _userManager
 
 @{
     ViewData["Title"] = "Details";
@@ -338,9 +339,9 @@
 
             @foreach (var discussion in Model.Module.Discussions)
             {
-            <div class="media my-4 d-flex row">
+            <div class="media my-4 row">
                 <div class="media-img col-2">
-                    <img class="w-100 mr-3 rounded-circle" alt="Bootstrap Media Preview" src="https://i.imgur.com/stD0Q19.jpg" />
+                    <img class="mr-3 rounded-circle" alt="Bootstrap Media Preview" src="https://i.imgur.com/stD0Q19.jpg" />
                 </div>
 
                 <div class="col-10 comment-demographics d-flex flex-column">
@@ -350,9 +351,12 @@
                             <span> - @discussion.CreatedAt</span>
                         </div>
                         @*if user is admin or user is the owner of the comment*@
+                        @if ( (User.IsInRole("Admin")) || (User.IsInRole("Registered") && discussion.UserId == _userManager.GetUserId(User)) )
+                        {
                         <div class="col-3 text-end reply">
-                            <a href="#"><span> delete</span></a>
+                            <a asp-action="DeleteDiscussion" asp-route-id="@discussion.DiscussionId">Delete</a>
                         </div>
+                        }
                     </div>
                     <div class="comment">
                         @discussion.Comment
@@ -360,48 +364,6 @@
                 </div>
             </div>
             }
-
-            <div class="media my-4 d-flex row">
-                <div class="media-img col-2 col-md-2">
-                    <img class="w-100 mr-3 rounded-circle" alt="Bootstrap Media Preview" src="https://i.imgur.com/stD0Q19.jpg" />
-                </div>
-
-                <div class="col-10 col-md-10 comment-demographics d-flex flex-column">
-                    <div class="row pb-3">
-                        <div class="col-9 d-flex">
-                            <h5 class="pe-3">Maria Smantha</h5>
-                            <span> - 2 hours ago</span>
-                        </div>
-                        <div class="col-3 text-end reply">
-                            <a href="#"><span><i class="fa fa-reply"></i> reply</span></a>
-                        </div>
-                    </div>
-                    <div class="comment">
-                        It is a long established fact that a reader will be distracted by the readable content of a page.
-                    </div>
-                </div>
-            </div>
-
-            <div class="media my-4 d-flex row">
-                <div class="media-img col-2">
-                    <img class="w-100 mr-3 rounded-circle" alt="Bootstrap Media Preview" src="https://i.imgur.com/stD0Q19.jpg" />
-                </div>
-
-                <div class="col-10 comment-demographics d-flex flex-column">
-                    <div class="row pb-3">
-                        <div class="col-9 d-flex">
-                            <h5 class="pe-3">Maria Smantha</h5>
-                            <span> - 2 hours ago</span>
-                        </div>
-                        <div class="col-3 text-end reply">
-                            <a href="#"><span><i class="fa fa-reply"></i> reply</span></a>
-                        </div>
-                    </div>
-                    <div class="comment">
-                        It is a long established fact that a reader will be distracted by the readable content of a page.
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     

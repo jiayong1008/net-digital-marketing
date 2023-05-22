@@ -209,62 +209,54 @@ namespace DigitalMarketing2.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Details), new { id = module.ModuleId });
+        }
 
-            // Display error if user removed all question options
-            //if (quizFormModel.QuestionOptions == null)
-            //{
-            //    ModelState.AddModelError(string.Empty, "Please enter at least two options and select one as the correct answer.");
-            //    return View(quizFormModel);
-            //}
+        // GET: Modules/DeleteDiscussion/5
+        [Authorize(Roles = "Admin,Registered")]
+        public async Task<IActionResult> DeleteDiscussion(int id)
+        {
+            if (id == null || _context.Discussion == null) 
+                return NotFound();
 
-            // Temporarily remove QuestionOptions[{i}].QuizQuestion's validations (Will manually add later on)
-            //for (int i = 0; i < quizFormModel.QuestionOptions.Count; i++)
-            //    ModelState.Remove($"QuestionOptions[{i}].QuizQuestion");
+            var discussion = await _context.Discussion
+                .Include(d => d.Module)
+                .Include(d => d.User)
+                .FirstOrDefaultAsync(d => d.DiscussionId == id);
+            if (discussion == null) return NotFound();
 
-            //if (!ModelState.IsValid) return View(quizFormModel);
+            // Check for unauthorized user
+            var user = await _userManager.GetUserAsync(User);
+            if (!User.IsInRole("Admin") && user.Id != discussion.UserId)
+            {
+                return NotFound();
+            }
 
-            // Check if there are at least two question options
-            //if (quizFormModel.QuestionOptions.Count < 2 || quizFormModel.AnswerId == null)
-            //{
-            //    ModelState.AddModelError(string.Empty, "Please enter at least two options and select one as the correct answer.");
-            //    return View(quizFormModel);
-            //}
+            return View("../Discussion/Delete", discussion);
+        }
 
-            //var lesson = await _context.Lesson.FindAsync(quizFormModel.LessonId);
-            //if (lesson == null) return NotFound();
+        // POST: Modules/DeleteDiscussion/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Registered")]
+        public async Task<IActionResult> DeleteDiscussion(int? id)
+        {
+            if (id == null) return NotFound();
 
-            // Create new QuizQuestion
-            //var quizQuestion = new QuizQuestion
-            //{
-            //    Lesson = lesson,
-            //    Question = quizFormModel.Question,
-            //    QuizOrder = quizFormModel.QuizOrder,
-            //};
+            var discussion = await _context.Discussion
+                .Include(d => d.Module)
+                .FirstOrDefaultAsync(d => d.DiscussionId == id);
+            if (discussion == null) return NotFound();
 
-            //_context.Add(quizQuestion);
-            //await _context.SaveChangesAsync();
+            // Check for unauthorized user
+            var user = await _userManager.GetUserAsync(User);
+            if (!User.IsInRole("Admin") && user.Id != discussion.UserId)
+                return NotFound();
 
-            // Create new quiz options and set answer for the question
-            //var index = 0;
-            //foreach (var option in quizFormModel.QuestionOptions)
-            //{
-            //    var quizOption = new QuestionOption
-            //    {
-            //        QuizQuestionId = quizQuestion.QuizQuestionId,
-            //        Option = option.Option
-            //    };
+            var moduleId = discussion.Module.ModuleId;
+            _context.Discussion.Remove(discussion);
+            await _context.SaveChangesAsync();
 
-            //    _context.Add(quizOption);
-            //    quizQuestion.QuestionOptions.Add(quizOption);
-
-            //    if (index == quizFormModel.AnswerId)
-            //        quizQuestion.Answer = quizOption;
-
-            //    await _context.SaveChangesAsync();
-            //    index++;
-            //}
-
-            //return RedirectToAction(nameof(Index), new { LessonId = lesson.LessonId });
+            return RedirectToAction("Details", new { id = moduleId });
         }
 
         private bool ModuleExists(int id)
