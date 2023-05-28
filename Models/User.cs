@@ -11,7 +11,7 @@ namespace DigitalMarketing2.Models
         public Gender Gender { get; set; }
 
         // RELATIONSHIPS
-        public List<Enrollment>? Enrollments { get; set; }
+        //public List<Enrollment>? Enrollments { get; set; }
 
         [DisplayName("Quiz Question")]
         public List<Discussion>? Discussions { get; set; }

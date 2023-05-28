@@ -31,7 +31,8 @@ namespace DigitalMarketing2.Controllers
 
         // GET: Quizzes
         [Authorize(Roles = "Admin,Registered")]
-        public async Task<IActionResult> Index(int? LessonId, List<QuizQuestionViewModel>? quizQuestionViewModels)
+        public async Task<IActionResult> Index(
+            int? LessonId, List<QuizQuestionViewModel>? quizQuestionViewModels)
         {
             if (LessonId == null) return NotFound();
 

@@ -24,7 +24,7 @@ namespace DigitalMarketing2.Models
         // RELATIONSHIPS
         public List<Lesson>? Lessons { get; set;}
         public List<Discussion>? Discussions { get; set; }
-        public List<Enrollment>? Enrollments { get; set;}
+        //public List<Enrollment>? Enrollments { get; set;}
 
     }
 

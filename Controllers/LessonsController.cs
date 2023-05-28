@@ -39,16 +39,6 @@ namespace DigitalMarketing2.Controllers
                 .FirstOrDefaultAsync(m => m.LessonId == id);
             if (lesson == null) { return NotFound(); }
 
-            //ViewBag.ModuleList = _context.Module.ToList();
-            //var lessonForm = new LessonCreateFormModel
-            //{
-            //    LessonId = lesson.LessonId,
-            //    Name = lesson.Name,
-            //    Duration = lesson.Duration,
-            //    LessonOrder = lesson.LessonOrder,
-            //    ModuleId = lesson.Module.ModuleId
-            //};
-
             return View(lesson);
         }
 
@@ -68,7 +58,8 @@ namespace DigitalMarketing2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([Bind("Name,Duration,LessonOrder,ModuleId")] LessonCreateFormModel lessonForm)
+        public async Task<IActionResult> Create(
+            [Bind("Name,Duration,LessonOrder,ModuleId")] LessonCreateFormModel lessonForm)
         {
             if (ModelState.IsValid)
             {
@@ -119,7 +110,8 @@ namespace DigitalMarketing2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int id, [Bind("LessonId,Name,Duration,LessonOrder, ModuleId")] LessonCreateFormModel lessonForm)
+        public async Task<IActionResult> Edit(int id, 
+            [Bind("LessonId,Name,Duration,LessonOrder, ModuleId")] LessonCreateFormModel lessonForm)
         {
             if (id != lessonForm.LessonId) { return NotFound(); }
 
@@ -180,12 +172,16 @@ namespace DigitalMarketing2.Controllers
             if (_context.Lesson == null)
                 return Problem("Entity set 'ApplicationDbContext.Lesson'  is null.");
 
-            var lesson = await _context.Lesson.FindAsync(id);
+            var lesson = await _context.Lesson
+                .Include(lesson => lesson.Module)
+                .FirstOrDefaultAsync(l => l.LessonId == id);
+            var moduleId = lesson.Module.ModuleId;
+
             if (lesson != null)
                 _context.Lesson.Remove(lesson);
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), "Modules", new { id = moduleId });
         }
 
         private bool LessonExists(int id)

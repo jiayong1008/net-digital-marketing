@@ -49,6 +49,8 @@
         {
             <a asp-action="Edit" asp-route-id="@Model?.LessonId">Edit</a>
             <span> | </span>
+            <a asp-action="Delete" asp-route-id="@Model?.LessonId">Delete</a>
+            <span> | </span>
         }
         <a asp-controller="Modules" asp-action="Details" asp-route-id="@Model.Module.ModuleId">Back to List</a>
     </div>

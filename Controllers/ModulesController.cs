@@ -104,12 +104,10 @@ namespace DigitalMarketing2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int id, [Bind("ModuleId,Name,Description,ModuleOrder")] Module @module)
+        public async Task<IActionResult> Edit(int id, 
+            [Bind("ModuleId,Name,Description,ModuleOrder")] Module @module)
         {
-            if (id != @module.ModuleId)
-            {
-                return NotFound();
-            }
+            if (id != @module.ModuleId) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -120,14 +118,8 @@ namespace DigitalMarketing2.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ModuleExists(@module.ModuleId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!ModuleExists(@module.ModuleId)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
