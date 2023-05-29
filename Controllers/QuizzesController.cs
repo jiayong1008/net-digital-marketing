@@ -131,12 +131,14 @@ namespace DigitalMarketing2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([Bind("LessonId,Question,QuizOrder,QuestionOptions,AnswerId")] QuizFormModel quizFormModel)
+        public async Task<IActionResult> Create(
+            [Bind("LessonId,Question,QuizOrder,QuestionOptions,AnswerId")] QuizFormModel quizFormModel)
         {
             // Display error if user removed all question options
             if (quizFormModel.QuestionOptions == null)
             {
-                ModelState.AddModelError(string.Empty, "Please enter at least two options and select one as the correct answer.");
+                ModelState.AddModelError(string.Empty, 
+                    "Please enter at least two options and select one as the correct answer.");
                 return View(quizFormModel);
             }
 
@@ -149,7 +151,8 @@ namespace DigitalMarketing2.Controllers
             // Check if there are at least two question options
             if (quizFormModel.QuestionOptions.Count < 2 || quizFormModel.AnswerId == null)
             {
-                ModelState.AddModelError(string.Empty, "Please enter at least two options and select one as the correct answer.");
+                ModelState.AddModelError(string.Empty, 
+                    "Please enter at least two options and select one as the correct answer.");
                 return View(quizFormModel);
             }
 
@@ -232,7 +235,8 @@ namespace DigitalMarketing2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int id, [Bind("QuizQuestionId,LessonId,Question,QuizOrder,QuestionOptions,AnswerId")] QuizFormModel quizFormModel)
+        public async Task<IActionResult> Edit(int id, 
+            [Bind("QuizQuestionId,LessonId,Question,QuizOrder,QuestionOptions,AnswerId")] QuizFormModel quizFormModel)
         {
             if (id != quizFormModel.QuizQuestionId) return NotFound();
 
@@ -244,7 +248,8 @@ namespace DigitalMarketing2.Controllers
             if (quizFormModel.QuestionOptions == null)
             {
                 //quizFormModel.QuestionOptions = quizQuestion.QuestionOptions.ToList()
-                ModelState.AddModelError(string.Empty, "Please enter at least two options and select one as the correct answer.");
+                ModelState.AddModelError(string.Empty, 
+                    "Please enter at least two options and select one as the correct answer.");
                 return View(quizFormModel);
             }
 
@@ -323,17 +328,15 @@ namespace DigitalMarketing2.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.QuizQuestion == null)
-            {
                 return NotFound();
-            }
 
             var quizQuestion = await _context.QuizQuestion
                 .Include(q => q.Answer)
+                .Include(q => q.Lesson)
                 .FirstOrDefaultAsync(m => m.QuizQuestionId == id);
+
             if (quizQuestion == null)
-            {
                 return NotFound();
-            }
 
             return View(quizQuestion);
         }
@@ -348,15 +351,18 @@ namespace DigitalMarketing2.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.QuizQuestion'  is null.");
             }
+
             var quizQuestion = await _context.QuizQuestion
                 .Include(q => q.Lesson)
                 .FirstOrDefaultAsync(q => q.QuizQuestionId == id);
             if (quizQuestion == null) return NotFound();
 
             var lessonId = quizQuestion.Lesson.LessonId;
+
+            // Remove quiz question
             _context.QuizQuestion.Remove(quizQuestion);
-            
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index), new { LessonId = lessonId });
         }
 

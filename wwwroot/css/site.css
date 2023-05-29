@@ -145,6 +145,11 @@ li {
     }
 }
 
+/* Error Inputs */
+input.input-validation-error {
+    border-color: red;
+}
+
 
 /* ==================================================================
                             NAVBAR
