@@ -303,7 +303,7 @@
             </h2>
         </div>
 
-        <div class="col-12 discussion-cards d-flex flex-column">
+        <div class="col-12 discussion-cards d-flex flex-column gap-4">
             <form asp-action="CreateDiscussion">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -339,12 +339,12 @@
 
             @foreach (var discussion in Model.Module.Discussions)
             {
-            <div class="media my-4 row">
-                <div class="media-img col-2">
+            <div class="media my-1 row">
+                <div class="media-img col-sm-2 col-1">
                     <img class="mr-3 rounded-circle" alt="Bootstrap Media Preview" src="https://i.imgur.com/stD0Q19.jpg" />
                 </div>
 
-                <div class="col-10 comment-demographics d-flex flex-column">
+                <div class="col-sm-10 col-11 comment-demographics d-flex flex-column">
                     <div class="row pb-3">
                         <div class="col-9 d-flex">
                             <h5 class="pe-3">@discussion.User.UserName</h5>

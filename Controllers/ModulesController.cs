@@ -178,8 +178,12 @@ namespace DigitalMarketing2.Controllers
             ModelState.Remove("Module.ModuleOrder");
 
             for (int i = 0, n = model.Module.Lessons.Count; i < n; i++)
-            {
                 ModelState.Remove($"Module.Lessons[{i}].Module");
+
+            for (int i = 0, n = model.Module.Discussions.Count; i < n; i++)
+            {
+                ModelState.Remove($"Module.Discussions[{i}].User");
+                ModelState.Remove($"Module.Discussions[{i}].Module");
             }
 
             var module = model.Module;
@@ -187,6 +191,12 @@ namespace DigitalMarketing2.Controllers
             {
                 if (model.Module.Lessons == null) model.Module.Lessons = new List<Lesson>();
                 if (model.Module.Discussions == null) model.Module.Discussions = new List<Discussion>();
+
+                // Include user in discussions
+                foreach (var d in model.Module.Discussions)
+                {
+                    d.User = await _userManager.FindByIdAsync(d.UserId);
+                }
                 return View("Details", model);
             }
 
