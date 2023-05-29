@@ -221,7 +221,7 @@
             {
                 <a asp-controller="Lessons" asp-action="Details" asp-route-id="@lesson.LessonId" class="w-100">
                 <div class="solution_card my-md-3 my-2 w-100 d-flex flex-md-row flex-column justify-content-around">
-                    <div>
+                    <div class="flex-center">
                         <div class="hover_color_bubble"></div>
                         <div class="so_top_icon">
                             <svg id="Layer_1" enable-background="new 0 0 512 512" height="50" viewBox="0 0 512 512" width="40" xmlns="http://www.w3.org/2000/svg">
@@ -337,25 +337,43 @@
                 </div>
             </form>
 
+            <div class="mt-2 d-flex flex-column gap-sm-2 gap-4">
             @foreach (var discussion in Model.Module.Discussions)
             {
             <div class="media my-1 row">
-                <div class="media-img col-sm-2 col-1">
+                <div class="media-img col-lg-1 col-3">
                     <img class="mr-3 rounded-circle" alt="Bootstrap Media Preview" src="https://i.imgur.com/stD0Q19.jpg" />
                 </div>
 
-                <div class="col-sm-10 col-11 comment-demographics d-flex flex-column">
+                <div class="col-lg-10 col-8 offset-1 comment-demographics d-flex flex-column">
                     <div class="row pb-3">
-                        <div class="col-9 d-flex">
-                            <h5 class="pe-3">@discussion.User.UserName</h5>
-                            <span> - @discussion.CreatedAt</span>
-                        </div>
                         @*if user is admin or user is the owner of the comment*@
                         @if ( (User.IsInRole("Admin")) || (User.IsInRole("Registered") && discussion.UserId == _userManager.GetUserId(User)) )
                         {
-                        <div class="col-3 text-end reply">
+                        <div class="col-sm-9 col-8 d-flex flex-sm-row flex-column">
+                            <div class="d-flex">
+                            @if(await _userManager.IsInRoleAsync(discussion.User, "Admin"))
+                            {
+                                <h5>@discussion.User.UserName</h5>
+                                <img src="~/css/icons/verified-icon.png" height="20" class="ps-2 pe-3" />
+                            }
+                            else
+                            {
+                                <h5 class="pe-3">@discussion.User.UserName</h5>
+                            }
+                            </div>
+                            <span class="small">@discussion.CreatedAt</span>
+                        </div>
+                        <div class="col-sm-3 col-4 text-end reply">
                             <a asp-action="DeleteDiscussion" asp-route-id="@discussion.DiscussionId">Delete</a>
                         </div>
+                        }
+                        else
+                        {
+                            <div class="col-12 d-flex flex-sm-row flex-column">
+                                <h5 class="pe-3">@discussion.User.UserName</h5>
+                                <span class="small">@discussion.CreatedAt</span>
+                            </div>
                         }
                     </div>
                     <div class="comment">
@@ -363,7 +381,9 @@
                     </div>
                 </div>
             </div>
+            <hr />
             }
+            </div>
         </div>
     </div>
     
