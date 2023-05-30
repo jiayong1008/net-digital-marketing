@@ -26,6 +26,7 @@ namespace DigitalMarketing2.Models
         public Module Module { get; set; }
 
         public List<LessonSection>? LessonSections { get; set; }
+        public List<QuizQuestion>? QuizQuestions { get; set; }
     }
 
     public class LessonCreateFormModel

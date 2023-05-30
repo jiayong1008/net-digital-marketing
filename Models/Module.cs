@@ -43,4 +43,23 @@ namespace DigitalMarketing2.Models
         public Module Module { get; set; }
         public DiscussionFormModel DiscussionForm { get; set; }
     }
+
+    public class ModulePopularity
+    {
+        public int ModuleId { get; set; }
+        public string ModuleName { get; set; }
+        public int DiscussionCount { get; set; }
+        public int QuizCompletionCount { get; set; }
+        public List<LessonData> Lessons { get; set; }
+    }
+
+    public class LessonData
+    {
+        public List<QuizQuestionData> QuizQuestions { get; set; }
+    }
+
+    public class QuizQuestionData
+    {
+        public int StudentScoresCount { get; set; }
+    }
 }

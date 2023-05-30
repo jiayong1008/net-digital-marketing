@@ -23,6 +23,16 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "hotreloadprofile": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+          "ASPNETCORE_ENVIRONMENT": "Development",
+          "Key": "Value"
+      },
+      "applicationUrl": "https://localhost:7227;http://localhost:5202",
+      "hotReloadProfile": "aspnetcore"
     }
   }
 }

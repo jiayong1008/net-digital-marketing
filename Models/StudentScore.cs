@@ -11,14 +11,12 @@ namespace DigitalMarketing2.Models
         public int StudentScoreId { get; set; }
 
         [Required]
-        [DisplayName("Status")] // correct, incorrect
+        [DisplayName("Status")]
         public ScoreStatus Status { get; set; }
 
         // RELATIONSHIPS
         [Required]
         public User User { get; set; }
-        //[Required]
-        //public Enrollment Enrollment { get; set; }
 
         [Required]
         [ForeignKey("QuizQuestion")]

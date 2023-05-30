@@ -43,9 +43,15 @@ namespace DigitalMarketing2.Data
 
             modelBuilder.Entity<StudentScore>()
                 .HasOne(score => score.QuizQuestion)
-                .WithMany()
+                .WithMany(q => q.StudentScores)
                 .HasForeignKey(score => score.QuizQuestionId)
                 .OnDelete(DeleteBehavior.Restrict);
+                
+            // modelBuilder.Entity<StudentScore>()
+            //     .HasOne(score => score.QuizQuestion)
+            //     .WithMany()
+            //     .HasForeignKey(score => score.QuizQuestionId)
+            //     .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
