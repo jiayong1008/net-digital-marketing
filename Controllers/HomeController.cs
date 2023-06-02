@@ -94,11 +94,66 @@ namespace DigitalMarketing2.Controllers
                 y = m.DiscussionCount + m.QuizCompletionCount
             }).ToList();
 
+            // Bar chart to compare the average scores of different modules'
+            var averageModuleScores = await _context.Module
+                .Include(m => m.Lessons)
+                    .ThenInclude(l => l.QuizQuestions)
+                        .ThenInclude(q => q.StudentScores)
+                .Select(m => new ModuleAverageScore {
+                    ModuleName = m.Name,
+                    AverageScore = 0.0,
+                    Lessons = m.Lessons.Select(l => new LessonAverageScoreData {
+                        QuizQuestions = l.QuizQuestions.Select(q => new QuizQuestionAvgScoreData {
+                            StudentScores = q.StudentScores
+                        }).ToList()
+                    }).ToList()
+                }).ToListAsync();
+
+            foreach (var module in averageModuleScores)
+            {
+                // double avgScore = 0.0;
+                int totalQuesAttempts = 0;
+                int totalCorrectAttempts = 0;
+                foreach (var lesson in module.Lessons)
+                {
+                    foreach (var quizQuestion in lesson.QuizQuestions)
+                    {
+                        totalQuesAttempts += quizQuestion.StudentScores.Count;
+                        totalCorrectAttempts += quizQuestion.StudentScores.Where(
+                            s => s.Status == ScoreStatus.correct
+                        ).Count();
+                    }
+                }
+
+                if (totalQuesAttempts != 0)
+                module.AverageScore = (totalCorrectAttempts * 100.0) / totalQuesAttempts;
+            }
+
+            // Convert average module score to bar chart format
+            var avgModuleScoreChart = averageModuleScores.Select(m => new {
+                x = m.ModuleName,
+                y = m.AverageScore
+            }).ToList();
+
             // Store the extracted data in ViewBag
             ViewBag.ActiveStudentCount = activeStudentCount;
             ViewBag.CompletedQuizCount = completedQuizCount;
             ViewBag.TotalDiscussionCount = totalDiscussionCount;
             ViewBag.ModulePopularityChart = modulePopularityChart;
+            ViewBag.AvgModuleScoreChart = avgModuleScoreChart;
+
+            // Retrieve the total number of users enrolled in each lesson.
+
+            
+            // Calculate the average score for each quiz question.
+            // Retrieve the top 5 lessons with the highest number of quiz questions.
+            // Retrieve the average number of quiz questions per lesson.
+            // Calculate the completion rate for each module, which is the percentage of completed quizzes out of the total number of quiz questions in the module.
+            // Retrieve the users who have scored the highest in each quiz question.
+            // Calculate the average number of discussion cards per module.
+            // Retrieve the users who have completed all the quizzes in a specific lesson.
+            // Calculate the average score for each user across all quizzes.
+            // Retrieve the quiz questions that have not been attempted by any user.
 
             return View("AdminIndex");
         }

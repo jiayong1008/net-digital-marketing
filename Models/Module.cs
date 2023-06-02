@@ -53,6 +53,13 @@ namespace DigitalMarketing2.Models
         public List<LessonData> Lessons { get; set; }
     }
 
+    public class ModuleAverageScore
+    {
+        public string ModuleName { get; set; }
+        public double AverageScore { get; set; }
+        public List<LessonAverageScoreData> Lessons { get; set; }
+    }
+
     public class LessonData
     {
         public List<QuizQuestionData> QuizQuestions { get; set; }
@@ -61,5 +68,15 @@ namespace DigitalMarketing2.Models
     public class QuizQuestionData
     {
         public int StudentScoresCount { get; set; }
+    }
+
+    public class LessonAverageScoreData
+    {
+        public List<QuizQuestionAvgScoreData> QuizQuestions { get; set; }
+    }
+
+    public class QuizQuestionAvgScoreData
+    {
+        public List<StudentScore> StudentScores { get; set; }
     }
 }

@@ -10,9 +10,10 @@
         document.addEventListener('DOMContentLoaded', function () {
             // Retrieve modulePopularityChart data from ViewBag
             var modulePopularityChart = @Html.Raw(Json.Serialize(ViewBag.ModulePopularityChart));
+            var avgModuleScoreChart = @Html.Raw(Json.Serialize(ViewBag.AvgModuleScoreChart));
 
             // Use the data to render charts using ApexCharts
-            renderCharts(modulePopularityChart);
+            renderCharts(modulePopularityChart, avgModuleScoreChart);
         });
     </script>
 }
@@ -196,7 +197,7 @@
             <div id="modulePopularityPie"></div>
         </div>
         <div class="graph_card col-md flex-center p-4">
-            <div id="modulePopularityPie2"></div>
+            <div id="avgModuleScoreBar"></div>
         </div>
     </div>
 
