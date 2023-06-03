@@ -92,10 +92,20 @@ section.intro {
         border-radius: 0.6rem;
     }
 
-.intro .container, .intro-details, .intro-pic1, .intro-pic2 {
+.intro .container, .intro-details{
     min-height: 80vh;
 }
 
+.intro-details {
+    width: 70%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #EFEFEF;
+    min-height: 100vh;
+}
 .intro h3 {
     font-size: 2.5rem;
 }
@@ -128,16 +138,79 @@ section.intro {
     border-radius: 0.6rem;
 }
 
-.intro-pic2 .spacer-50 {
-    position: relative;
-    padding-bottom: 25vh;
-}
 
 
 /* ============================================
-                HOME FAQ SECTION 
+                DYNAMIC CARD SECTION 
 ==============================================*/
 
+
+/* ============================================
+                SECOND INTRO SECTION 
+==============================================*/
+section.intro2 {
+    min-height: 40vh;
+    background-color: #2d4f59;
+    /* background-color: #518b9b; */
+    position: relative;
+}
+
+    section.intro2::after {
+        content: "";
+        position: absolute;
+        background: #2ca9cc;
+        opacity: 0.6;
+        height: 20px;
+        min-width: 300px;
+        max-width: 500px;
+        top: 20%;
+        right: -10%;
+        transform: translateX(-20%);
+        border-radius: 0.6rem;
+    }
+
+.intro .container2, .intro-details2 {
+    min-height: 40vh;
+
+}
+
+.intro-details2 {
+    width: 70%;
+    margin: auto;
+    display: flex;
+    text-align:justify;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    color: #EFEFEF;
+    min-height: 40vh;
+}
+
+.intro h3 {
+    font-size: 2.5rem;
+}
+
+.arrow-link {
+    width: 70px;
+    transform: scale(1);
+}
+
+    .arrow-link:hover {
+        animation: enlarge 0.8s ease-in-out infinite alternate;
+    }
+
+@keyframes enlarge {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.5);
+    }
+}
+/* ============================================
+                HOME FAQ SECTION 
+==============================================*/
 section.home-faq {
     width: 100%;
     height: fit-content;
