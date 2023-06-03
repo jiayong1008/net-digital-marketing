@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DigitalMarketing2.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class initialize_table : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,8 +30,7 @@ namespace DigitalMarketing2.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
-                    ReturnURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -174,27 +173,27 @@ namespace DigitalMarketing2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Enrollment",
+                name: "Discussion",
                 columns: table => new
                 {
-                    EnrollmentId = table.Column<int>(type: "int", nullable: false)
+                    DiscussionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ModuleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Enrollment", x => x.EnrollmentId);
+                    table.PrimaryKey("PK_Discussion", x => x.DiscussionId);
                     table.ForeignKey(
-                        name: "FK_Enrollment_AspNetUsers_UserId",
+                        name: "FK_Discussion_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Enrollment_Module_ModuleId",
+                        name: "FK_Discussion_Module_ModuleId",
                         column: x => x.ModuleId,
                         principalTable: "Module",
                         principalColumn: "ModuleId",
@@ -207,7 +206,7 @@ namespace DigitalMarketing2.Migrations
                 {
                     LessonId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(type: "int", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Duration = table.Column<int>(type: "int", nullable: false),
                     LessonOrder = table.Column<int>(type: "int", nullable: false),
                     ModuleId = table.Column<int>(type: "int", nullable: false)
@@ -223,6 +222,104 @@ namespace DigitalMarketing2.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "LessonSection",
+                columns: table => new
+                {
+                    LessonSectionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LessonSectionOrder = table.Column<int>(type: "int", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    ImageType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LessonId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LessonSection", x => x.LessonSectionId);
+                    table.ForeignKey(
+                        name: "FK_LessonSection_Lesson_LessonId",
+                        column: x => x.LessonId,
+                        principalTable: "Lesson",
+                        principalColumn: "LessonId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuestionOption",
+                columns: table => new
+                {
+                    QuestionOptionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Option = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QuizQuestionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuestionOption", x => x.QuestionOptionId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuizQuestion",
+                columns: table => new
+                {
+                    QuizQuestionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Question = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QuizOrder = table.Column<int>(type: "int", nullable: false),
+                    LessonId = table.Column<int>(type: "int", nullable: false),
+                    AnswerId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuizQuestion", x => x.QuizQuestionId);
+                    table.ForeignKey(
+                        name: "FK_QuizQuestion_Lesson_LessonId",
+                        column: x => x.LessonId,
+                        principalTable: "Lesson",
+                        principalColumn: "LessonId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuizQuestion_QuestionOption_AnswerId",
+                        column: x => x.AnswerId,
+                        principalTable: "QuestionOption",
+                        principalColumn: "QuestionOptionId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StudentScore",
+                columns: table => new
+                {
+                    StudentScoreId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    QuizQuestionId = table.Column<int>(type: "int", nullable: false),
+                    AnswerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentScore", x => x.StudentScoreId);
+                    table.ForeignKey(
+                        name: "FK_StudentScore_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentScore_QuestionOption_AnswerId",
+                        column: x => x.AnswerId,
+                        principalTable: "QuestionOption",
+                        principalColumn: "QuestionOptionId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentScore_QuizQuestion_QuizQuestionId",
+                        column: x => x.QuizQuestionId,
+                        principalTable: "QuizQuestion",
+                        principalColumn: "QuizQuestionId",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -264,23 +361,13 @@ namespace DigitalMarketing2.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Discussion_LessonId",
+                name: "IX_Discussion_ModuleId",
                 table: "Discussion",
-                column: "LessonId");
+                column: "ModuleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Discussion_UserId",
                 table: "Discussion",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Enrollment_ModuleId",
-                table: "Enrollment",
-                column: "ModuleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Enrollment_UserId",
-                table: "Enrollment",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -292,11 +379,63 @@ namespace DigitalMarketing2.Migrations
                 name: "IX_LessonSection_LessonId",
                 table: "LessonSection",
                 column: "LessonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuestionOption_QuizQuestionId",
+                table: "QuestionOption",
+                column: "QuizQuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuizQuestion_AnswerId",
+                table: "QuizQuestion",
+                column: "AnswerId",
+                unique: true,
+                filter: "[AnswerId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuizQuestion_LessonId",
+                table: "QuizQuestion",
+                column: "LessonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentScore_AnswerId",
+                table: "StudentScore",
+                column: "AnswerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentScore_QuizQuestionId",
+                table: "StudentScore",
+                column: "QuizQuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentScore_UserId",
+                table: "StudentScore",
+                column: "UserId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_QuestionOption_QuizQuestion_QuizQuestionId",
+                table: "QuestionOption",
+                column: "QuizQuestionId",
+                principalTable: "QuizQuestion",
+                principalColumn: "QuizQuestionId",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Lesson_Module_ModuleId",
+                table: "Lesson");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_QuizQuestion_Lesson_LessonId",
+                table: "QuizQuestion");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_QuestionOption_QuizQuestion_QuizQuestionId",
+                table: "QuestionOption");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -316,10 +455,10 @@ namespace DigitalMarketing2.Migrations
                 name: "Discussion");
 
             migrationBuilder.DropTable(
-                name: "Enrollment");
+                name: "LessonSection");
 
             migrationBuilder.DropTable(
-                name: "LessonSection");
+                name: "StudentScore");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -328,10 +467,16 @@ namespace DigitalMarketing2.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Module");
+
+            migrationBuilder.DropTable(
                 name: "Lesson");
 
             migrationBuilder.DropTable(
-                name: "Module");
+                name: "QuizQuestion");
+
+            migrationBuilder.DropTable(
+                name: "QuestionOption");
         }
     }
 }

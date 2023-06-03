@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigitalMarketing2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230402105421_modify_lesson_section_fields")]
-    partial class modify_lesson_section_fields
+    [Migration("20230603081713_initialize_table")]
+    partial class initialize_table
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,7 +40,7 @@ namespace DigitalMarketing2.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("LessonId")
+                    b.Property<int>("ModuleId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -49,43 +49,11 @@ namespace DigitalMarketing2.Migrations
 
                     b.HasKey("DiscussionId");
 
-                    b.HasIndex("LessonId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Discussion");
-                });
-
-            modelBuilder.Entity("DigitalMarketing2.Models.Enrollment", b =>
-                {
-                    b.Property<int>("EnrollmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EnrollmentId"));
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ModuleId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("EnrollmentId");
-
                     b.HasIndex("ModuleId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Enrollment");
+                    b.ToTable("Discussion");
                 });
 
             modelBuilder.Entity("DigitalMarketing2.Models.Lesson", b =>
@@ -170,6 +138,92 @@ namespace DigitalMarketing2.Migrations
                     b.HasKey("ModuleId");
 
                     b.ToTable("Module");
+                });
+
+            modelBuilder.Entity("DigitalMarketing2.Models.QuestionOption", b =>
+                {
+                    b.Property<int>("QuestionOptionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuestionOptionId"));
+
+                    b.Property<string>("Option")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("QuizQuestionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("QuestionOptionId");
+
+                    b.HasIndex("QuizQuestionId");
+
+                    b.ToTable("QuestionOption");
+                });
+
+            modelBuilder.Entity("DigitalMarketing2.Models.QuizQuestion", b =>
+                {
+                    b.Property<int>("QuizQuestionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuizQuestionId"));
+
+                    b.Property<int?>("AnswerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LessonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("QuizOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("QuizQuestionId");
+
+                    b.HasIndex("AnswerId")
+                        .IsUnique()
+                        .HasFilter("[AnswerId] IS NOT NULL");
+
+                    b.HasIndex("LessonId");
+
+                    b.ToTable("QuizQuestion");
+                });
+
+            modelBuilder.Entity("DigitalMarketing2.Models.StudentScore", b =>
+                {
+                    b.Property<int>("StudentScoreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentScoreId"));
+
+                    b.Property<int>("AnswerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuizQuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("StudentScoreId");
+
+                    b.HasIndex("AnswerId");
+
+                    b.HasIndex("QuizQuestionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("StudentScore");
                 });
 
             modelBuilder.Entity("DigitalMarketing2.Models.User", b =>
@@ -375,33 +429,14 @@ namespace DigitalMarketing2.Migrations
 
             modelBuilder.Entity("DigitalMarketing2.Models.Discussion", b =>
                 {
-                    b.HasOne("DigitalMarketing2.Models.Lesson", "Lesson")
-                        .WithMany()
-                        .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DigitalMarketing2.Models.User", "User")
-                        .WithMany("Discussions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Lesson");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DigitalMarketing2.Models.Enrollment", b =>
-                {
                     b.HasOne("DigitalMarketing2.Models.Module", "Module")
-                        .WithMany("Enrollments")
+                        .WithMany("Discussions")
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DigitalMarketing2.Models.User", "User")
-                        .WithMany("Enrollments")
+                        .WithMany("Discussions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -431,6 +466,62 @@ namespace DigitalMarketing2.Migrations
                         .IsRequired();
 
                     b.Navigation("Lesson");
+                });
+
+            modelBuilder.Entity("DigitalMarketing2.Models.QuestionOption", b =>
+                {
+                    b.HasOne("DigitalMarketing2.Models.QuizQuestion", "QuizQuestion")
+                        .WithMany("QuestionOptions")
+                        .HasForeignKey("QuizQuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("QuizQuestion");
+                });
+
+            modelBuilder.Entity("DigitalMarketing2.Models.QuizQuestion", b =>
+                {
+                    b.HasOne("DigitalMarketing2.Models.QuestionOption", "Answer")
+                        .WithOne()
+                        .HasForeignKey("DigitalMarketing2.Models.QuizQuestion", "AnswerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("DigitalMarketing2.Models.Lesson", "Lesson")
+                        .WithMany("QuizQuestions")
+                        .HasForeignKey("LessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Answer");
+
+                    b.Navigation("Lesson");
+                });
+
+            modelBuilder.Entity("DigitalMarketing2.Models.StudentScore", b =>
+                {
+                    b.HasOne("DigitalMarketing2.Models.QuestionOption", "Answer")
+                        .WithMany()
+                        .HasForeignKey("AnswerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DigitalMarketing2.Models.QuizQuestion", "QuizQuestion")
+                        .WithMany("StudentScores")
+                        .HasForeignKey("QuizQuestionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DigitalMarketing2.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Answer");
+
+                    b.Navigation("QuizQuestion");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -487,20 +578,27 @@ namespace DigitalMarketing2.Migrations
             modelBuilder.Entity("DigitalMarketing2.Models.Lesson", b =>
                 {
                     b.Navigation("LessonSections");
+
+                    b.Navigation("QuizQuestions");
                 });
 
             modelBuilder.Entity("DigitalMarketing2.Models.Module", b =>
                 {
-                    b.Navigation("Enrollments");
+                    b.Navigation("Discussions");
 
                     b.Navigation("Lessons");
+                });
+
+            modelBuilder.Entity("DigitalMarketing2.Models.QuizQuestion", b =>
+                {
+                    b.Navigation("QuestionOptions");
+
+                    b.Navigation("StudentScores");
                 });
 
             modelBuilder.Entity("DigitalMarketing2.Models.User", b =>
                 {
                     b.Navigation("Discussions");
-
-                    b.Navigation("Enrollments");
                 });
 #pragma warning restore 612, 618
         }
