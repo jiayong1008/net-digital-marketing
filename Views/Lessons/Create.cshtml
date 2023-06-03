@@ -42,12 +42,13 @@
                 </div>
             </form>
                 <hr />
-                <div class ="d-flex justify-content-center">
-                    
-                    @*Should go back to module page*@
-                    <a asp-controller="Modules" asp-action="Details" asp-route-id="@Model.ModuleId">Back</a>
-                </div>
+                
         </div>
+            <div>
+
+                @*Should go back to module page*@
+                <a asp-controller="Modules" asp-action="Details" asp-route-id="@Model.ModuleId">Back</a>
+            </div>
     </div>
 
 
