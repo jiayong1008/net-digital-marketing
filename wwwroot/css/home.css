@@ -72,10 +72,11 @@
                 INTRO SECTION 
 ==============================================*/
 section.intro {
-    min-height: 100vh;
+    min-height: 40vh;
     background-color: #417280;
     /* background-color: #518b9b; */
     position: relative;
+
 }
 
     section.intro::after {
@@ -93,7 +94,7 @@ section.intro {
     }
 
 .intro .container, .intro-details{
-    min-height: 80vh;
+    min-height: 40vh;
 }
 
 .intro-details {
@@ -101,10 +102,11 @@ section.intro {
     margin: auto;
     display: flex;
     flex-direction: column;
+    text-align: justify;
     justify-content: center;
     align-items: center;
     color: #EFEFEF;
-    min-height: 100vh;
+    min-height: 40vh;
 }
 .intro h3 {
     font-size: 2.5rem;
@@ -140,34 +142,24 @@ section.intro {
 
 
 
-/* ============================================
-                DYNAMIC CARD SECTION 
-==============================================*/
-
 
 /* ============================================
                 SECOND INTRO SECTION 
 ==============================================*/
 section.intro2 {
     min-height: 40vh;
-    background-color: #2d4f59;
+    /*background-color: #2d4f59;*/
     /* background-color: #518b9b; */
     position: relative;
+    background-image: url(./images/homepage.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
 }
 
-    section.intro2::after {
-        content: "";
-        position: absolute;
-        background: #2ca9cc;
-        opacity: 0.6;
-        height: 20px;
-        min-width: 300px;
-        max-width: 500px;
-        top: 20%;
-        right: -10%;
-        transform: translateX(-20%);
-        border-radius: 0.6rem;
-    }
+
 
 .intro .container2, .intro-details2 {
     min-height: 40vh;
