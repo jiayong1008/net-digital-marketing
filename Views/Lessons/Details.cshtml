@@ -9,37 +9,37 @@
     <h1>Lesson Details</h1>
 
     <div>
-        <h4>Lesson</h4>
+
         <hr />
         <dl class="row">
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.LessonId)
             </dt>
-            <dd class="col-sm-10">
+                <dd class="col-sm-10 text-justify">
                 @Html.DisplayFor(model => model.LessonId)
             </dd>
             <dt class = "col-sm-2">
                 @Html.DisplayNameFor(model => model.Name)
-            </dt>
-            <dd class = "col-sm-10">
+                </dt>
+                <dd class="col-sm-10 text-justify">
                 @Html.DisplayFor(model => model.Name)
             </dd>
             <dt class = "col-sm-2">
                 @Html.DisplayNameFor(model => model.Duration)
             </dt>
-            <dd class = "col-sm-10">
+                <dd class="col-sm-10 text-justify">
                 @Html.DisplayFor(model => model.Duration)
             </dd>
             <dt class = "col-sm-2">
                 @Html.DisplayNameFor(model => model.LessonOrder)
             </dt>
-            <dd class = "col-sm-10">
+                <dd class="col-sm-10 text-justify">
                 @Html.DisplayFor(model => model.LessonOrder)
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Module.ModuleId)
             </dt>
-            <dd class="col-sm-10">
+                <dd class="col-sm-10 text-justify">
                 @Html.DisplayFor(model => model.Module.ModuleId)
             </dd>
         </dl>
@@ -54,10 +54,11 @@
         }
         <a asp-controller="Modules" asp-action="Details" asp-route-id="@Model.Module.ModuleId">Back to List</a>
     </div>
-
+        <hr />
     <div class="mt-5">
         <div class="col-12 d-flex justify-content-between">
             <h4>Lesson Sections</h4>
+                <hr />
             @if (this.User.IsInRole("Admin"))
             {
                 <div class="mt-1">
@@ -65,13 +66,13 @@
                 </div>
             }
         </div>
-        
+            <hr />
         <dl class="row">
         @foreach(var lessonSection in Model.LessonSections)
         {
             @if (lessonSection.IsText)
             {
-                <dd class="col-sm-10">
+                <dd class="col-sm-10 text-justify">
                     @Html.DisplayFor(modelItem => lessonSection.Text)
                 </dd>
             }
@@ -95,7 +96,7 @@
         }
         </dl>
     </div>
-
+        <hr />
     <div class="mt-5">
         <div class="col-12 d-flex justify-content-between">
             <h4>Quiz Sections</h4>
