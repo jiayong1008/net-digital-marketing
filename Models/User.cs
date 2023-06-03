@@ -17,6 +17,7 @@ namespace DigitalMarketing2.Models
         public List<Discussion>? Discussions { get; set; }
     }
 
+    // public enum UserRoles { registered, admin }
     public enum Gender { male, female }
 
     public class RegisterUserModel
