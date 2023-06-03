@@ -12,11 +12,13 @@
 <section class="quiz-view-page min-vh-100 m-auto py-5 pt-10vh col-white w-80">
 <div class="container pt-5">
 
-<h1>Index</h1>
+<h1>Quiz Index</h1>
 
-<p class="mb-4">
+<br />
+<p class="mb-4 ms-lg-0">
     <a asp-action="Create" asp-route-LessonId="@Model.LessonId">Create New</a>
 </p>
+<br />
 
 <form method="post" asp-action="SubmitQuiz">
 <div class="row solution_cards_box d-flex flex-wrap gy-4 justify-content-around">
@@ -64,7 +66,7 @@
 </div>
 </form>
 
-
+<br />
 <table class="table col-white">
     <thead>
         <tr>
@@ -72,7 +74,7 @@
                 Lesson Name
             </th>
             <th>
-                Qustion
+                Question
             </th>
             <th>
                 Number of Options
@@ -115,6 +117,7 @@
 </table>
 
         <p>
+            <br />
             <a asp-controller="Lessons" asp-action="Details" asp-route-id="@Model.LessonId">Back To Lesson</a>
         </p>
 
