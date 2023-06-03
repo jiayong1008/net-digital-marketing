@@ -4,8 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
+<section class="about-page min-vh-100 m-auto py-5 pt-10vh col-white w-80">
+    <hr />
 <h1>Details</h1>
-
+    <hr />
 <div>
     <h4>LessonSection</h4>
     <hr />
@@ -40,6 +42,13 @@
         }
 
         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LessonId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LessonId)
+        </dd>
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Image)
         </dt>
         @if (Model.Image != null)
@@ -53,12 +62,7 @@
             <dd class="col-sm-10">N/A</dd>
         }
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LessonId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LessonId)
-        </dd>
+        
 
     </dl>
 </div>
@@ -66,3 +70,4 @@
     <a asp-action="Edit" asp-route-id="@Model?.LessonSectionId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+</section>
