@@ -23,6 +23,7 @@ namespace DigitalMarketing2.Models
         public int LessonOrder { get; set; }
 
         // RELATIONSHIPS
+        public int ModuleId { get; set; }
         public Module Module { get; set; }
 
         public List<LessonSection>? LessonSections { get; set; }

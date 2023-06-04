@@ -25,6 +25,7 @@ namespace DigitalMarketing2.Models
         // RELATIONSHIPS
         [Required]
         [DisplayName("Lesson Name")]
+        public int LessonId { get; set; }
         public Lesson Lesson { get; set; }
 
         // Navigation property to the collection of associated QuestionOptions

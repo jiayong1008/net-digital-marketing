@@ -16,6 +16,7 @@ namespace DigitalMarketing2.Models
 
         // RELATIONSHIPS
         [Required]
+        // public string UserId { get; set; }
         public User User { get; set; }
 
         [Required]
