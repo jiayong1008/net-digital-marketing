@@ -109,10 +109,10 @@ namespace DigitalMarketing2.Controllers
 
             var profileUserModel = new ProfileUserModel
             {
-                Id = currentUser.Id,
-                Name = currentUser.UserName,
-                Email = currentUser.Email,
-                Gender = currentUser.Gender,
+                Id = user.Id,
+                Name = user.UserName,
+                Email = user.Email,
+                Gender = user.Gender,
                 profileModuleSummaries = profileModuleSummaries,
             };
 
