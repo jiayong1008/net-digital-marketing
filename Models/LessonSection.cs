@@ -26,6 +26,7 @@ namespace DigitalMarketing2.Models
         // RELATIONSHIPS
         [Required]
         [DisplayName("Lesson")]
+        public int LessonId { get; set; }
         public Lesson Lesson { get; set; }
 
         // Only one of Text and Image can be filled at a time
