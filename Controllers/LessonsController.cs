@@ -35,7 +35,7 @@ namespace DigitalMarketing2.Controllers
 
             var lesson = await _context.Lesson
                 .Include(lesson => lesson.Module)
-                .Include(lesson => lesson.LessonSections)
+                .Include(lesson => lesson.LessonSections.OrderBy(ls => ls.LessonSectionOrder)) // Order the lesson sections
                 .FirstOrDefaultAsync(m => m.LessonId == id);
             if (lesson == null) { return NotFound(); }
 

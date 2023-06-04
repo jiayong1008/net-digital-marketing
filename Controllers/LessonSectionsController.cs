@@ -290,12 +290,16 @@ namespace DigitalMarketing2.Controllers
             if (_context.LessonSection == null)
                 return Problem("Entity set 'ApplicationDbContext.LessonSection'  is null.");
             
-            var lessonSection = await _context.LessonSection.FindAsync(id);
-            if (lessonSection != null)
-                _context.LessonSection.Remove(lessonSection);
+            var lessonSection = await _context.LessonSection
+                .Include(ls => ls.Lesson)
+                .FirstOrDefaultAsync(ls => ls.LessonSectionId == id);
+            if (lessonSection ==  null) return NotFound();
+
+            var lessonId = lessonSection.LessonId;
+            _context.LessonSection.Remove(lessonSection);
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Lessons", new { id = lessonId });
         }
 
         private bool LessonSectionExists(int id)

@@ -69,10 +69,10 @@
         <hr />
     <div class="mt-5">
         <div class="col-12 d-flex justify-content-between">
-            <h4>Lesson Sections</h4>
-                <hr />
             @if (this.User.IsInRole("Admin"))
             {
+                <h4>Lesson Sections</h4>
+                <hr />
                 <div class="mt-1">
                     <a asp-controller="LessonSections" asp-action="Create" asp-route-LessonId="@Model.LessonId" class="secondary-btn px-4 py-2">+ Section</a>
                 </div>
@@ -84,7 +84,7 @@
         {
             @if (lessonSection.IsText)
             {
-            <dd style="text-align: center;">
+            <dd style="text-align: justify;">
                     @Html.DisplayFor(modelItem => lessonSection.Text)
                             <hr />
                 </dd>

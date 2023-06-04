@@ -185,11 +185,11 @@ namespace DigitalMarketing2.Controllers
             
             if (model.Module.Discussions != null)
             {
-            for (int i = 0, n = model.Module.Discussions.Count; i < n; i++)
-            {
-                ModelState.Remove($"Module.Discussions[{i}].User");
-                ModelState.Remove($"Module.Discussions[{i}].Module");
-            }
+                for (int i = 0, n = model.Module.Discussions.Count; i < n; i++)
+                {
+                    ModelState.Remove($"Module.Discussions[{i}].User");
+                    ModelState.Remove($"Module.Discussions[{i}].Module");
+                }
             }
 
             var module = model.Module;
