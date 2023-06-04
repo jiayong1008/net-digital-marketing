@@ -129,6 +129,10 @@ li {
     color: white;
 }
 
+.min-vh-80 {
+    min-height: 80vh;
+}
+
 /* Bootstrap equivalent of 'md' breakpoint */
 @media (min-width: 768px) {
     .col-md-45 {

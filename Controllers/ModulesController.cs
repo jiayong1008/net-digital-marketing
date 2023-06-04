@@ -47,6 +47,7 @@ namespace DigitalMarketing2.Controllers
                 .FirstOrDefaultAsync(mod => mod.ModuleId == id);
 
             if (@module == null) return NotFound();
+            @module.Discussions ??= new List<Discussion>();
 
             var moduleDetailModel = new ModuleDetailModel
             {
@@ -180,10 +181,15 @@ namespace DigitalMarketing2.Controllers
             for (int i = 0, n = model.Module.Lessons.Count; i < n; i++)
                 ModelState.Remove($"Module.Lessons[{i}].Module");
 
+            model.Module.Discussions ??= new List<Discussion>();
+            
+            if (model.Module.Discussions != null)
+            {
             for (int i = 0, n = model.Module.Discussions.Count; i < n; i++)
             {
                 ModelState.Remove($"Module.Discussions[{i}].User");
                 ModelState.Remove($"Module.Discussions[{i}].Module");
+            }
             }
 
             var module = model.Module;
