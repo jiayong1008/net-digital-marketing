@@ -7,7 +7,8 @@
 <section class="user-update-page min-vh-100 m-auto py-5 pt-10vh col-white w-80">
     <div class="container pt-5">
 
-<h1 class="text-white">Update User</h1>
+<h1 class="text-white">Edit Own Details</h1>
+<br />
 @if (User.IsInRole("Admin"))
 {
     <a asp-action="Index" class="btn btn-secondary">Back</a>
@@ -24,14 +25,17 @@ else
     <input type="hidden" asp-for="Name" />
 
     <div class="form-group">
+        <br />
         <label asp-for="Name"></label>
         <input asp-for="Name" class="form-control" disabled />
     </div>
     <div class="form-group">
+        <br />
         <label asp-for="Email"></label>
         <input asp-for="Email" class="form-control" />
     </div>
     <div class="form-group">
+        <br />
         <label asp-for="Gender"></label>
         <select asp-for="Gender" class="form-control" asp-items="@new SelectList(Enum.GetNames(typeof(Gender)))">
             <option disabled value="Select">Select Gender</option>
@@ -39,15 +43,18 @@ else
     </div>
     <!-- Password input -->
     <div class="form-group">
+        <br />
         <label asp-for="Password" class="form-label"></label>
         <input asp-for="Password" class="form-control" />
     </div>
 
     <!-- Password Confirmation input -->
     <div class="form-group">
+        <br />
         <label asp-for="PasswordConfirmation" class="form-label"></label>
         <input asp-for="PasswordConfirmation" class="form-control" />
     </div>
+    <br />
     <button type="submit" class="btn btn-primary">Save</button>
 </form>
 

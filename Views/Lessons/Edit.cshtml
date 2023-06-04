@@ -7,12 +7,11 @@
 <section class="lesson-edit-page min-vh-100 m-auto py-5 pt-10vh col-white w-80">
   <div class="container pt-5">
 
-    <h1>Edit</h1>
+    <h1>Edit Lesson</h1>
 
-    <h4>Lesson</h4>
     <hr />
     <div class="row">
-        <div class="col-md-4">
+            <div class="col-md-4 mx-auto">
             <form asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="LessonId" />
@@ -21,20 +20,24 @@
                     <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
+                    <hr />
                 <div class="form-group">
                     <label asp-for="Duration" class="control-label"></label>
                     <input asp-for="Duration" class="form-control" />
                     <span asp-validation-for="Duration" class="text-danger"></span>
                 </div>
+                    <hr />
                 <div class="form-group">
                     <label asp-for="LessonOrder" class="control-label"></label>
                     <input asp-for="LessonOrder" class="form-control" />
                     <span asp-validation-for="LessonOrder" class="text-danger"></span>
                 </div>
+                    <hr />
                 <input type="hidden" asp-for="ModuleId"/>
-                <div class="form-group">
+                    <div class="form-group d-flex justify-content-center">
                     <input type="submit" value="Save" class="btn btn-primary" />
                 </div>
+                    <hr />
             </form>
         </div>
     </div>
