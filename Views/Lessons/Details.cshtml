@@ -76,18 +76,21 @@
         {
             @if (lessonSection.IsText)
             {
-                <dd class="col-sm-10 text-justify">
+            <dd style="text-align: center;">
                     @Html.DisplayFor(modelItem => lessonSection.Text)
+                            <hr />
                 </dd>
+                
             }
             else if (lessonSection.IsImage)
             {
-                <dd class="col-sm-10">
-                    <img src="data:image;base64,@Convert.ToBase64String(lessonSection.ImageData)" alt="Lesson Section Image" style="max-width: 200px; max-height: 200px;" />
+                <dd style="text-align: center;">
+                    <img src="data:image;base64,@Convert.ToBase64String(lessonSection.ImageData)" alt="Lesson Section Image" style="max-width: 500px; max-height: 500px;" />
+                            <hr />
                 </dd>
             }
 
-            <dd>
+            <dd style="text-align: center;">
                 @if (this.User.IsInRole("Admin"))
                 {
                 <a asp-controller="LessonSections" asp-action="Edit" asp-route-id="@lessonSection.LessonSectionId">Edit</a>
