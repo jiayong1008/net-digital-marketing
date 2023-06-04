@@ -18,7 +18,7 @@
             <h1 class="flex-center ms-3 mb-0">Quiz</h1>
         </div>
 
-        <form method="post">
+        <form method="post" asp-action="SubmitQuiz">
             <br />
             <div class="row solution_cards_box d-flex flex-wrap gy-4 justify-content-around">
                 @{ var modelIndex = 0; }
@@ -58,7 +58,7 @@
                     modelIndex++;
                 }
             </div>
-            <button type="submit">Submit</button>
+            <input type="hidden" asp-for="LessonId">
             <button type="submit">Submit</button>
         </form>
 

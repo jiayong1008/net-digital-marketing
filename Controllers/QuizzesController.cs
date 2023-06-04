@@ -71,7 +71,14 @@ namespace DigitalMarketing2.Controllers
                     return RedirectToAction("Details", "Lessons", new { id = LessonId });
 
                 else if (quizQuestionViewModels.Count > 0)
-                    return View("AttemptQuiz", quizQuestionViewModels);
+                {
+                    var model = new AttemptQuizIndexModel
+                    {
+                        LessonId = (int)LessonId,
+                        QuizQuestionViewModels = quizQuestionViewModels
+                    };
+                    return View("AttemptQuiz", model);
+                }
 
                 quizQuestionViewModels = new List<QuizQuestionViewModel>();
 
@@ -92,7 +99,13 @@ namespace DigitalMarketing2.Controllers
                     };
                     quizQuestionViewModels.Add(quizQuestionViewModel);
                 }
-                return View("AttemptQuiz", quizQuestionViewModels);
+
+                var quizIndexModel = new AttemptQuizIndexModel
+                {
+                    LessonId = (int)LessonId,
+                    QuizQuestionViewModels = quizQuestionViewModels
+                };
+                return View("AttemptQuiz", quizIndexModel);
             }
         }
 
@@ -375,27 +388,27 @@ namespace DigitalMarketing2.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Registered")]
         public async Task<IActionResult> SubmitQuiz(
-            [Bind("QuizQuestionId,Question,LessonId,AnswerId,AttemptedAnswerId")] 
-            IList<QuizQuestionViewModel> quizQuestionViewModels)
+            [Bind("LessonId,QuizQuestionViewModels")] 
+            AttemptQuizIndexModel model)
         {
             //var lessonId = quizAttemptModels.First().LessonId;
-            var lessonId = 1;
-            var numQuesModels = quizQuestionViewModels.Count;
+            var lessonId = model.LessonId;
+            var numQuesModels = model.QuizQuestionViewModels.Count;
 
-            for (int i = 0; i < numQuesModels; i++)
-            {
-                ModelState.Remove($"[{i}].Options");
-            }
+            // for (int i = 0; i < numQuesModels; i++)
+            // {
+            //     ModelState.Remove($"QuizQuestionViewModels[{i}].Options");
+            // }
 
-            if (!ModelState.IsValid)
-                return RedirectToAction(nameof(Index), new { LessonId = lessonId, quizQuestionViewModels });
+            // if (!ModelState.IsValid)
+            //     return RedirectToAction(nameof(Index), new { LessonId = lessonId, model.QuizQuestionViewModels });
 
             // Retrieve the current user
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             User user = await _userManager.FindByIdAsync(userId);
 
             // Loop through each quiz question and create a student score instance for it
-            foreach (var question in quizQuestionViewModels)
+            foreach (var question in model.QuizQuestionViewModels)
             {
                 // Retrieve the selected answer from the form
                 int attemptedAnswerId = question.AttemptedAnswerId;

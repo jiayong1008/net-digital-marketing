@@ -43,6 +43,12 @@ namespace DigitalMarketing2.Models
         public int NumOptions => QuestionOptions.Count;
     }
 
+    public class AttemptQuizIndexModel
+    {
+        public int LessonId { get; set; }
+        public List<QuizQuestionViewModel> QuizQuestionViewModels { get; set; }
+    }
+
     public class ViewQuizIndexModel
     {
         public int LessonId { get; set; }
