@@ -179,7 +179,7 @@ namespace DigitalMarketing2.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,Registered")]
-        public async Task<IActionResult> Update([Bind("Id,Name,Email,Gender,Password,PasswordConfirmaiton")] UpdateUserModel userModel)
+        public async Task<IActionResult> Update([Bind("Id,Name,Email,Gender,Password,PasswordConfirmation")] UpdateUserModel userModel)
         {
             User user = await userManager.FindByIdAsync(userModel.Id);
 
