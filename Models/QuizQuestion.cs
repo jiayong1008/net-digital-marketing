@@ -46,6 +46,7 @@ namespace DigitalMarketing2.Models
     public class ViewQuizIndexModel
     {
         public int LessonId { get; set; }
+        public string LessonName { get; set; }
         public List<QuizQuestion> QuizQuestions { get; set; }
     }
 

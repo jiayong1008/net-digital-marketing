@@ -315,3 +315,16 @@ footer .copyright {
     font-size: 0.6rem;
     padding-bottom: 1rem;
 }
+
+
+/* ==================================================================
+                            ICONS
+===================================================================*/
+
+.back-svg {
+    fill: white;
+}
+
+.back-svg:hover {
+    fill: #dadada;
+}

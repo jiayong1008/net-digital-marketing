@@ -37,6 +37,7 @@ namespace DigitalMarketing2.Controllers
             if (LessonId == null) return NotFound();
 
             var user = await _userManager.GetUserAsync(User);
+            var lesson = await _context.Lesson.FindAsync(LessonId);
             List<QuizQuestion> quizQuestions = null;
             
             if (await _userManager.IsInRoleAsync(user, "Admin"))
@@ -52,6 +53,7 @@ namespace DigitalMarketing2.Controllers
                 var viewQuizIndexModel = new ViewQuizIndexModel
                 {
                     LessonId = (int)LessonId,
+                    LessonName = lesson.Name,
                     QuizQuestions = quizQuestions,
                 };
 
