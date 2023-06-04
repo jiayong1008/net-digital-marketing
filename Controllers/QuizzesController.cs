@@ -447,7 +447,7 @@ namespace DigitalMarketing2.Controllers
 
             // Redirect the user to the student score index page for this lesson
             //return RedirectToAction("Results", "StudentScore", new { user, LessonId });
-            return RedirectToAction("Details", "Lessons", new { id = lessonId });
+            return RedirectToAction("Details", "User", new { id = userId });
         }
         
     private bool QuizQuestionExists(int id)
