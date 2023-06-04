@@ -47,6 +47,48 @@ namespace DigitalMarketing2.Data
                 .HasForeignKey(score => score.QuizQuestionId)
                 .OnDelete(DeleteBehavior.Restrict);
                 
+            // SEED DATA
+            // modelBuilder.Entity<Module>().HasData(
+            //     new Module
+            //     {
+            //         Name = "Take a business online",
+            //         Description = "It's never been easier, cheaper or more beneficial for your business to get online. Don’t be intimidated by the breadth of opportunities in digital.",
+            //         ModuleOrder = 1,
+            //     },
+            //     new Module
+            //     {
+            //         Name = "Make it easy for people to find a business on the web",
+            //         Description = "It's never been easier, cheaper or more beneficial for your business to get online. Don’t be intimidated by the breadth of opportunities in digital.",
+            //         ModuleOrder = 2,
+            //     },
+            //     new Module
+            //     {
+            //         Name = "Take a Business Online",
+            //         Description = "It's never been easier, cheaper or more beneficial for your business to get online. Don’t be intimidated by the breadth of opportunities in digital.",
+            //         ModuleOrder = 3,
+            //     },
+            //     new Module
+            //     {
+            //         Name = "Take a Business Online",
+            //         Description = "It's never been easier, cheaper or more beneficial for your business to get online. Don’t be intimidated by the breadth of opportunities in digital.",
+            //         ModuleOrder = 4,
+            //     },
+            //     new Module
+            //     {
+            //         Name = "Take a Business Online",
+            //         Description = "It's never been easier, cheaper or more beneficial for your business to get online. Don’t be intimidated by the breadth of opportunities in digital.",
+            //         ModuleOrder = 5,
+            //     }
+            // );
+
+            // modelBuilder.Entity<Lesson>().HasData(
+            //     new Lesson {
+
+            //     }
+            // );
+
+
+
             // modelBuilder.Entity<StudentScore>()
             //     .HasOne(score => score.QuizQuestion)
             //     .WithMany()
