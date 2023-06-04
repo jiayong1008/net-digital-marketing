@@ -17,7 +17,7 @@ namespace DigitalMarketing2.Models
         public List<Discussion>? Discussions { get; set; }
     }
 
-    // public enum UserRoles { registered, admin }
+    public enum UserRoles { Registered, Admin }
     public enum Gender { male, female }
 
     public class RegisterUserModel
@@ -58,6 +58,32 @@ namespace DigitalMarketing2.Models
         public bool Remember { get; set; }
     }
 
+    public class AdminRegisterUserModel
+    {
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "E-mail is not valid")]
+        public string Email { get; set; }
+
+        [Required]
+        public Gender Gender { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [DisplayName("Password Confirmation")]
+        [Compare("Password")]
+        public string PasswordConfirmation { get; set; }
+
+        [Required]
+        public UserRoles Role { get; set; }
+    }
+
     public class UpdateUserModel
     {
         [Required]
@@ -82,6 +108,9 @@ namespace DigitalMarketing2.Models
         [DisplayName("Password Confirmation")]
         [Compare("Password")]
         public string? PasswordConfirmation { get; set; }
+
+        [Required]
+        public UserRoles Role { get; set; }
     }
 
     public class RoleEdit

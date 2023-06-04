@@ -41,6 +41,14 @@ else
             <option disabled value="Select">Select Gender</option>
         </select>
     </div>
+    @* <div class="form-group">
+        <br />
+        <label asp-for="Role"></label>
+        <select asp-for="Role" class="form-control" asp-items="@new SelectList(Enum.GetNames(typeof(UserRoles)))">
+            <option selected disabled value="Select">Select Role</option>
+        </select>
+    </div> *@
+
     <!-- Password input -->
     <div class="form-group">
         <br />

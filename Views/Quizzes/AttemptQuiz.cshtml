@@ -1,7 +1,7 @@
 ﻿@model IList<DigitalMarketing2.Models.QuizQuestionViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quiz Index";
 }
 
 @section Links {
@@ -65,7 +65,7 @@
         </form>
         <p>
             <br />
-            <a asp-controller="Lessons" asp-action="Details" asp-route-id="@Model[0].LessonId">Back To Lesson</a>
+            @* <a asp-controller="Lessons" asp-action="Details" asp-route-id="@Model[0].LessonId">Back To Lesson</a> *@
         </p>
     </div>
 </section>

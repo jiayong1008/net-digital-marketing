@@ -2,13 +2,13 @@
 const renderCharts = (modulePopularity, avgModuleScore) => {
   
     // console.log("Dashboard js");
-    // console.log(modulePopularity);
+    console.log(modulePopularity);
     // console.log(avgModuleScore);
 
     var modulePopularityPie = {
       series: modulePopularity.map(item => item.y),
       chart: {
-        width: 380,
+        width: 600,
         type: 'pie',
       },
       labels: modulePopularity.map(item => item.x),
@@ -54,7 +54,7 @@ const renderCharts = (modulePopularity, avgModuleScore) => {
       },
       legend: {
         position: 'right',
-        offsetY: 100,
+        offsetY: 50,
       },
     };
     

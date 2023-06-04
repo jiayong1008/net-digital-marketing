@@ -124,7 +124,7 @@ namespace DigitalMarketing2.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create(RegisterUserModel user)
+        public async Task<IActionResult> Create(AdminRegisterUserModel user)
         {
             if (ModelState.IsValid)
             {
@@ -136,12 +136,15 @@ namespace DigitalMarketing2.Controllers
                 };
 
                 IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
+                IdentityResult result2 =await userManager.AddToRoleAsync(appUser, user.Role.ToString());
 
-                if (result.Succeeded)
+                if (result.Succeeded && result2.Succeeded)
                     return RedirectToAction("Index");
                 else
                 {
                     foreach (IdentityError error in result.Errors)
+                        ModelState.AddModelError("", error.Description);
+                    foreach (IdentityError error in result2.Errors)
                         ModelState.AddModelError("", error.Description);
                 }
             }
@@ -172,6 +175,7 @@ namespace DigitalMarketing2.Controllers
                 Name = user.UserName,
                 Email = user.Email,
                 Gender = user.Gender,
+                Role = isAdmin ? UserRoles.Admin : UserRoles.Registered,
             };
 
             return View(userModel);
@@ -179,7 +183,7 @@ namespace DigitalMarketing2.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,Registered")]
-        public async Task<IActionResult> Update([Bind("Id,Name,Email,Gender,Password,PasswordConfirmation")] UpdateUserModel userModel)
+        public async Task<IActionResult> Update([Bind("Id,Name,Email,Gender,Role,Password,PasswordConfirmation")] UpdateUserModel userModel)
         {
             User user = await userManager.FindByIdAsync(userModel.Id);
 
