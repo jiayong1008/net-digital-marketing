@@ -3,6 +3,10 @@
     ViewData["Title"] = "Details";
 }
 
+@section Links {
+    <link rel="stylesheet" href="~/css/lesson.css" asp-append-version="true">
+}
+
 <section class="lesson-details-page min-vh-100 m-auto py-5 pt-10vh col-white w-80">
   <div class="container pt-5">
 
@@ -97,6 +101,30 @@
         </dl>
     </div>
         <hr />
+
+    <div class="min-vh-100 pt-5">
+        <div class="slider">
+            <input type="radio" name="testimonial" id="t-1" checked>
+            <input type="radio" name="testimonial" id="t-2">
+
+            <div class="testimonials">
+                <img src="~/css/images/phone-white.png" class="phone" alt="phone">
+                <label class="item" for="t-1">
+                    <img src="~/css/images/sliderimg1.png" alt="sliderimg1">
+                </label>
+                <label class="item" for="t-2">
+                    <img src="~/css/images/sliderimg2.png" alt="sliderimg2">
+                </label>
+            </div>
+            <br />
+            <div class="dots">
+                <label for="t-1"></label>
+                <label for="t-2"></label>
+            </div>
+        </div>
+    </div>
+
+
     <div class="mt-5">
         <div class="col-12 d-flex justify-content-between">
             <h4>Quiz Sections</h4>
