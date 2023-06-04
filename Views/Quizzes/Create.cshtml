@@ -9,10 +9,9 @@
 
 <h1>Create Quiz</h1>
 
-<h4>QuizQuestion</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 mx-auto">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -27,11 +26,13 @@
                 <label asp-for="Question" class="control-label"></label>
                 <input asp-for="Question" class="form-control" />
                 <span asp-validation-for="Question" class="text-danger"></span>
+                <br />
             </div>
             <div class="form-group">
                 <label asp-for="QuizOrder" class="control-label"></label>
                 <input asp-for="QuizOrder" class="form-control" />
                 <span asp-validation-for="QuizOrder" class="text-danger"></span>
+                <br />
             </div>
             @*options and answer*@
             <div id="question-options">
@@ -54,14 +55,17 @@
                     </div>
                     <button type="button" id="add-option-button" class="btn btn-outline-primary mt-2">Add Option</button>
                     <span asp-validation-for="QuestionOptions" class="text-danger"></span>
+                    <br />
                 </div>
 
                 <div class="form-group">
+                    <br />
                     <label asp-for="AnswerId"></label>
                     <select class="form-control" asp-for="AnswerId" name="AnswerId" id="answer-dropdown">
                         <option value="">-- Select Answer --</option>
                     </select>
                     <span asp-validation-for="AnswerId" class="text-danger"></span>
+                    <br />
                 </div>
             </div>
 
