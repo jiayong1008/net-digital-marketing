@@ -11,9 +11,10 @@
 <section class="quiz-attempt-page min-vh-100 m-auto py-5 pt-10vh col-white w-80">
     <div class="container pt-5">
 
-        <h1>Index</h1>
+        <h1>Quiz</h1>
 
         <form method="post" asp-action="SubmitQuiz">
+            <br />
             <div class="row solution_cards_box d-flex flex-wrap gy-4 justify-content-around">
                 @{ var modelIndex = 0; }
                 @foreach (var question in Model)
@@ -63,6 +64,7 @@
             <button type="submit">Submit</button>
         </form>
         <p>
+            <br />
             <a asp-controller="Lessons" asp-action="Details" asp-route-id="@Model[0].LessonId">Back To Lesson</a>
         </p>
     </div>
