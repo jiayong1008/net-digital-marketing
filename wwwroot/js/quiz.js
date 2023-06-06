@@ -8,7 +8,7 @@ $(document).ready(function () {
     // Add new option input field
     $('#add-option-button').click(function () {
         var optionCount = $('.option-input').length;
-        var newOption = '<div class="input-group">' +
+        var newOption = '<div class="input-group my-3">' +
             '<input type="text" class="form-control option-input" name="QuestionOptions[' + optionCount + '].Option" asp-for="QuestionOptions[' + optionCount + '].Option" />' +
             '<div class="input-group-append">' +
             '<button type="button" class="btn btn-outline-secondary remove-option-button">Remove</button>' +

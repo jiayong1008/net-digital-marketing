@@ -371,7 +371,15 @@
                         else
                         {
                             <div class="col-12 d-flex flex-sm-row flex-column">
-                                <h5 class="pe-3">@discussion.User.UserName</h5>
+                                @if(await _userManager.IsInRoleAsync(discussion.User, "Admin"))
+                                {
+                                    <h5>@discussion.User.UserName</h5>
+                                    <img src="~/css/icons/verified-icon.png" height="20" class="ps-2 pe-3" />
+                                }
+                                else
+                                {
+                                    <h5 class="pe-3">@discussion.User.UserName</h5>
+                                }
                                 <span class="small">@discussion.CreatedAt</span>
                             </div>
                         }
