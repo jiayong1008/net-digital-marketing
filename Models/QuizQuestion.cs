@@ -46,6 +46,9 @@ namespace DigitalMarketing2.Models
     public class AttemptQuizIndexModel
     {
         public int LessonId { get; set; }
+
+        public string LessonName { get; set; }
+        
         public List<QuizQuestionViewModel> QuizQuestionViewModels { get; set; }
     }
 
@@ -91,8 +94,9 @@ namespace DigitalMarketing2.Models
         public int LessonId { get; set; }
 
         [BindNever]
-        public List<QuestionOptionViewModel> Options { get; set; }
+        public List<QuestionOptionViewModel>? Options { get; set; }
         public int AnswerId { get; set; }
+
         [Required]
         [RequiredAnswer(ErrorMessage = "Please select an answer.")]
         public int AttemptedAnswerId { get; set; }

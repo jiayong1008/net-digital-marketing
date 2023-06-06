@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DigitalMarketing2.Data;
 using DigitalMarketing2.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using NuGet.ContentModel;
 using System.Security.Claims;
-using System.Security.Policy;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace DigitalMarketing2.Controllers
 {
@@ -67,21 +62,10 @@ namespace DigitalMarketing2.Controllers
                     .OrderBy(q => q.QuizOrder)
                     .ToListAsync();
 
-                if (quizQuestions.Count == 0) 
+                if (quizQuestions.Count == 0) // No quiz for that question
                     return RedirectToAction("Details", "Lessons", new { id = LessonId });
 
-                else if (quizQuestionViewModels.Count > 0)
-                {
-                    var model = new AttemptQuizIndexModel
-                    {
-                        LessonId = (int)LessonId,
-                        QuizQuestionViewModels = quizQuestionViewModels
-                    };
-                    return View("AttemptQuiz", model);
-                }
-
                 quizQuestionViewModels = new List<QuizQuestionViewModel>();
-
                 foreach (QuizQuestion quizQuestion in quizQuestions)
                 {
                     var quizQuestionViewModel = new QuizQuestionViewModel
@@ -103,6 +87,7 @@ namespace DigitalMarketing2.Controllers
                 var quizIndexModel = new AttemptQuizIndexModel
                 {
                     LessonId = (int)LessonId,
+                    LessonName = lesson.Name,
                     QuizQuestionViewModels = quizQuestionViewModels
                 };
                 return View("AttemptQuiz", quizIndexModel);
@@ -388,20 +373,37 @@ namespace DigitalMarketing2.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Registered")]
         public async Task<IActionResult> SubmitQuiz(
-            [Bind("LessonId,QuizQuestionViewModels")] 
+            [Bind("LessonId,LessonName,QuizQuestionViewModels")] 
             AttemptQuizIndexModel model)
         {
             //var lessonId = quizAttemptModels.First().LessonId;
             var lessonId = model.LessonId;
             var numQuesModels = model.QuizQuestionViewModels.Count;
+            ModelState.Remove("LessonName");
 
-            // for (int i = 0; i < numQuesModels; i++)
-            // {
-            //     ModelState.Remove($"QuizQuestionViewModels[{i}].Options");
-            // }
+            if (!ModelState.IsValid)
+            {
+                var quizModel = new AttemptQuizIndexModel
+                {
+                    LessonId = lessonId,
+                    LessonName = model.LessonName,
+                    QuizQuestionViewModels = model.QuizQuestionViewModels
+                };
 
-            // if (!ModelState.IsValid)
-            //     return RedirectToAction(nameof(Index), new { LessonId = lessonId, model.QuizQuestionViewModels });
+                // Populate Options for each quizQuestionViewModel
+                foreach (var quizQuestion in quizModel.QuizQuestionViewModels)
+                {
+                    quizQuestion.Options = await _context.QuestionOption
+                        .Where(qo => qo.QuizQuestionId == quizQuestion.QuizQuestionId)
+                        .Select(qo => new QuestionOptionViewModel {
+                            QuestionOptionId = qo.QuestionOptionId,
+                            Option = qo.Option
+                        })
+                        .ToListAsync();
+                }
+                return View("AttemptQuiz", quizModel);
+                // return RedirectToAction(nameof(Index), new { LessonId = lessonId, quizQuestionViewModels = model.QuizQuestionViewModels });
+            }
 
             // Retrieve the current user
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

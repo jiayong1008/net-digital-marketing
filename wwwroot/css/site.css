@@ -79,6 +79,7 @@ li {
 .primary-btn {
     background-color: rgba(92, 113, 189, 1);
     /* background-color: rgba(43, 55, 96, 1); */
+    border-radius: 0.5rem;
     color: white;
     transition: background-color 0.8s, color 0.8s;
     z-index: 2;

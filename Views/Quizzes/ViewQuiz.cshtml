@@ -1,5 +1,5 @@
-﻿@model ViewQuizIndexModel
-@*@model IEnumerable<DigitalMarketing2.Models.QuizQuestion>*@
+﻿@* STRICTLY ADMIN ONLY VIEW *@
+@model ViewQuizIndexModel
 
 @{
     ViewData["Title"] = "Index";
@@ -20,12 +20,9 @@
 </div>
 
 <br />
-@if(this.User.IsInRole("Admin"))
-{
     <p class="mb-4 ms-lg-0">
         <a asp-action="Create" asp-route-LessonId="@Model.LessonId" class="secondary-btn px-4 py-2">Create New</a>
     </p>
-}
 <br />
 
 <form method="post" asp-action="SubmitQuiz">
@@ -40,12 +37,9 @@
                 <h3>@Html.DisplayFor(modelItem => question.Question)</h3>
             </div>
             <div class="flex-center">
-                @if (this.User.IsInRole("Admin"))
-                {
-                    <a asp-action="Delete" asp-route-id="@question.QuizQuestionId">
-                        <img src="~/css/icons/close-icon.svg" height="18" class="close-icon" />
-                    </a>
-                }
+                <a asp-action="Delete" asp-route-id="@question.QuizQuestionId">
+                    <img src="~/css/icons/close-icon.svg" height="18" class="close-icon" />
+                </a>
             </div>
         </div>
 
@@ -55,7 +49,12 @@
                 <label class="pt-2 options">
                     @if (option.QuestionOptionId == question.AnswerId)
                     {
-                        <span class="checkmark text-success fw-bold">@option.Option</span>
+                        <div class="d-flex row">
+                            <span class="checkmark text-success fw-bold col-md-6 col-10">@option.Option</span>
+                            <div class="col-md-6 col-2">
+                                <img src="~/css/icons/check-mark.png" alt="">
+                            </div>
+                        </div>
                     }
                     else
                     {
