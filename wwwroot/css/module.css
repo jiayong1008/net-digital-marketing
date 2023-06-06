@@ -41,8 +41,9 @@
         }
 
         .solution_cards_box .solution_card:hover .solu_title h3,
+        .solution_cards_box .solution_card:hover .solu_description h5,
         .solution_cards_box .solution_card:hover .solu_description p {
-            color: #fff;
+            color: #fff !important;
         }
 
     .solution_cards_box .solution_card:before {

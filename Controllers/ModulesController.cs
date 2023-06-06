@@ -178,10 +178,15 @@ namespace DigitalMarketing2.Controllers
             ModelState.Remove("Module.Description");
             ModelState.Remove("Module.ModuleOrder");
 
-            for (int i = 0, n = model.Module.Lessons.Count; i < n; i++)
-                ModelState.Remove($"Module.Lessons[{i}].Module");
-
+            model.Module.Lessons ??= new List<Lesson>();
             model.Module.Discussions ??= new List<Discussion>();
+            
+            if (model.Module.Lessons != null)
+            {
+                for (int i = 0, n = model.Module.Lessons.Count; i < n; i++)
+                    ModelState.Remove($"Module.Lessons[{i}].Module");
+            }
+
             
             if (model.Module.Discussions != null)
             {

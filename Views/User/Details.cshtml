@@ -40,15 +40,15 @@
             </dl>
         </div>
 
-        <div>
-            <a asp-action="Update" asp-route-id="@Model.Id">Edit</a> |
+        <div class="d-flex gap-3">
+            <a asp-action="Update" asp-route-id="@Model.Id" class="button secondary-btn px-5">Edit</a>
             @if (User.IsInRole("Admin"))
             {
-            <a asp-action="Index">Back</a>
+            <a asp-action="Index" class="button secondary-btn px-5">Back</a>
             }
             else
             {
-            <a asp-controller="Home" asp-action="Index">Back</a>
+            <a asp-controller="Home" asp-action="Index"class="button secondary-btn px-5">Back</a>
             }
 
         </div>
@@ -59,7 +59,7 @@
             <div class="row solution_cards_box d-flex flex-wrap gy-4 justify-content-around">
             @foreach (var module in Model.profileModuleSummaries)
             {
-                <div class="solution_card mx-2 col-lg-31 col-md-45 col-sm-10">
+                <div class="solution_card mx-2 col-lg-31 col-md-45 col-sm-10 p-4 ps-5 pb-5">
                     <div class="hover_color_bubble"></div>
                     <div class="so_top_icon">
                         <svg id="Layer_1" enable-background="new 0 0 512 512" height="50" viewBox="0 0 512 512" width="40" xmlns="http://www.w3.org/2000/svg">
@@ -112,12 +112,12 @@
                     <div class="solu_description">
                         @foreach (var quizScore in module.ProfileQuizScores)
                         {
-                            <div class="d-flex gap-3">
-                            <h4 class="text-black">@quizScore.LessonName</h4>
+                            <div class="d-flex gap-4">
+                            <h5 class="text-secondary">@quizScore.LessonName</h5>
                             <p> @Math.Round(quizScore.QuizScore, 2) % </p>
                             </div>
                         }
-                        <a asp-controller="Modules" asp-action="Details" asp-route-id="@module.ModuleId" class="read_more_btn">View Module</a>
+                        <a asp-controller="Modules" asp-action="Details" asp-route-id="@module.ModuleId" class="button secondary-btn px-5 read_more_btn mt-3">View Module</a>
                     </div>
                 </div>
             }
