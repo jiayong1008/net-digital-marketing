@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<User>
+@inject Microsoft.AspNetCore.Identity.UserManager<User> _userManager
+
 @{
     ViewData["Title"] = "READ USER";
 }
@@ -15,16 +17,19 @@
         <th>ID</th>
         <th>Name</th>
         <th>Email</th>
+        <th>Role</th>
         <th>Details</th>
         <th>Update</th>
         <th>Delete</th>
     </tr>
     @foreach (User user in Model)
     {
+        var role = await _userManager.IsInRoleAsync(user, "Admin") ? "Admin" : "Student";
         <tr>
             <td>@user.Id</td>
             <td>@user.UserName</td>
             <td>@user.Email</td>
+            <td>@role</td>
             <td>
                 <a class="btn btn-sm btn-primary" asp-action="Details" asp-route-id="@user.Id">
                     Details
