@@ -1,7 +1,7 @@
 # MarketUp - Digital Marketing Web Application
 A Digital Marketing Learning Web Application designed for students and admins. It provides an interactive learning experience for individuals interested in mastering the field of digital marketing. Administrators are authorized to manage and monitor the learning content of the website. 
 
-**YouTube Demonstration:**
+**YouTube Demonstration:** https://youtu.be/Lf7WL2TUAEA
 
 ## Project Specifications:
 This project is fully mobile-responsive and is implemented using ASP.Net (C#), SQL Server, HTML, CSS, Bootstrap, JavaScript, and ApexCharts. Listed below are the list of specifications in this project:
