@@ -167,7 +167,7 @@ header.main-header {
 }
 
 nav {
-    min-height: 10vh;
+    height: 10vh;
     width: 80%;
     margin: auto;
     display: flex;
@@ -177,10 +177,15 @@ nav {
     z-index: 3;
 }
 
-.logo {
+.logo img {
+    height: 50px;
+}
+
+.logo-name {
     font-size: 20px;
     font-weight: normal;
     margin: 0;
+    /* color: white; */
 }
 
 .desk-nav-links {

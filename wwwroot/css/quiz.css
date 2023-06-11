@@ -11,22 +11,6 @@
     transition: 0.7s;
 }
 
-    .solution_cards_box .solution_card:hover {
-        background: #309df0;
-        color: #fff;
-        transform: scale(1.1);
-        z-index: 9;
-    }
-
-        .solution_cards_box .solution_card:hover::before {
-            background: rgb(85 108 214 / 10%);
-        }
-
-        .solution_cards_box .solution_card:hover .solu_title h3,
-        .solution_cards_box .solution_card:hover .solu_description p {
-            color: #fff;
-        }
-
     .solution_cards_box .solution_card:before {
         content: "";
         position: absolute;
@@ -39,15 +23,6 @@
         top: -23px;
         border-radius: 35px;
     }
-
-    .solution_cards_box .solution_card:hover .solu_description a, button {
-        background: #fff !important;
-        color: #309df0;
-    }
-
-.solution_card {
-
-}
 
 .solution_card .close-icon {
     cursor: pointer;
@@ -110,7 +85,3 @@
         height: 50px;
         object-fit: contain;
     }
-
-.mb-4 {
-
-}

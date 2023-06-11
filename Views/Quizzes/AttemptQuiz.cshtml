@@ -24,7 +24,7 @@
                 @{ var modelIndex = 0; }
                 @foreach (var question in Model.QuizQuestionViewModels)
                 {
-                    <div class="solution_card mx-2 my-3 col-sm-12">
+                    <div class="solution_card px-4 mx-2 my-3 col-sm-12">
                         <div class="hover_color_bubble"></div>
 
                         <input type="hidden" asp-for="@Model.QuizQuestionViewModels[modelIndex].QuizQuestionId">
@@ -47,7 +47,7 @@
                             }
                             @for (int i = 0; i < numOptions; i++)
                             {
-                                <label class="pt-2 options">
+                                <label class="pt-2 options d-flex gap-3">
                                     <input type="radio" asp-for="@Model.QuizQuestionViewModels[modelIndex].AttemptedAnswerId" value="@quesOptions[i].QuestionOptionId">
                                     <span class="checkmark">@quesOptions[i].Option</span>
                                 </label>

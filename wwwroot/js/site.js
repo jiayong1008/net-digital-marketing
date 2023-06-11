@@ -13,14 +13,14 @@ function navScrollAnimation() {
 
     const header = document.querySelector('header.main-header');
     const hamburgerLines = document.querySelectorAll('.menu line');
-    const logo = document.querySelector('.logo');
+    const logoName = document.querySelector('.logo-name');
     const deskNavLinks = document.querySelectorAll('.desk-nav-link');
 
     // tl.reversed is default to false
     const tl = new TimelineMax({ paused: true, reversed: false });
 
     tl.fromTo(header, 0.15, { background: 'none', opacity: 1 }, { background: 'white', opacity: 0.9 })
-        .fromTo(logo, 0.2, { color: 'white' }, { color: 'black' }, '-=0.1')
+        .fromTo(logoName, 0.2, { color: 'white' }, { color: 'black' }, '-=0.1')
         .fromTo(hamburgerLines, 0.2, { stroke: 'white' }, { stroke: 'black' }, '-=0.2')
         .fromTo(deskNavLinks, 0.2, { color: 'white' }, { color: 'black' }, '-=0.3');
 
