@@ -6,6 +6,7 @@ namespace DigitalMarketing2.Controllers
     {
         public IActionResult Index()
         {
+            // pumk
             return View();
         }
     }
